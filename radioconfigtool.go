@@ -3,13 +3,20 @@ package main
 import (
 	"github.com/lxn/walk"
 	"strings"
-	"net"
-	"firstinspires.org/radioconfigtool/netconfig"
 	"fmt"
 	"runtime"
 	"github.com/lxn/walk/declarative"
+	"os"
+	"firstinspires.org/radioconfigtool/eventconfig"
+	"firstinspires.org/radioconfigtool/util"
+	"firstinspires.org/radioconfigtool/resources"
+	"firstinspires.org/radioconfigtool/netconfig"
 )
 
+var (
+	EventMode = false
+	PracticeField = false
+)
 func main() {
 
 	if runtime.GOOS != "windows" {
@@ -17,37 +24,27 @@ func main() {
 		return
 	}
 
-	fmt.Println("Network Interfaces:")
-	interfaces, err := net.Interfaces()
-	if err != nil {
-		panic(err)
+	if EventMode {
+		util.Debug("Downloading all OpenWRT images for teams.")
+		teams := eventconfig.GetTeams()
+		eventconfig.GetAllImages(teams)
 	}
-	for _, i := range interfaces {
-		fmt.Println(i)
 
-		fmt.Println("----")
-	}
-	fmt.Println(net.InterfaceByName(netconfig.NETINT_LAN))
-
-	var inTE, outTE *walk.TextEdit
-
-	declarative.MainWindow{
-		Title:   "SCREAMO",
-		MinSize: declarative.Size{600, 400},
-		Layout:  declarative.VBox{},
-		Children: []declarative.Widget{
-			declarative.HSplitter{
-				Children: []declarative.Widget{
-					declarative.TextEdit{AssignTo: &inTE},
-					declarative.TextEdit{AssignTo: &outTE, ReadOnly: true},
-				},
-			},
-			declarative.PushButton{
-				Text: "SCREAM",
-				OnClicked: func() {
-					outTE.SetText(strings.ToUpper(inTE.Text()))
-				},
-			},
-		},
-	}.Run()
+	netconfig.GetNETINT_LAN_GUID()
 }
+
+func writeOutAP51Flash() {
+	file, err := os.Create("ap51-flash.exe")
+	if err != nil {
+		// Could not create file
+	}
+	defer file.Close()
+	data, err := resources.Asset("ap51-flash.exe")
+
+	if err != nil {
+		// Could not read from resource
+	}
+	file.Write(data)
+	file.Sync()
+}
+
