@@ -1,11 +1,8 @@
 package main
 
 import (
-	"github.com/lxn/walk"
-	"strings"
 	"fmt"
 	"runtime"
-	"github.com/lxn/walk/declarative"
 	"os"
 	"firstinspires.org/radioconfigtool/eventconfig"
 	"firstinspires.org/radioconfigtool/util"

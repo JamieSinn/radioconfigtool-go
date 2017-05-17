@@ -7,6 +7,13 @@ import (
 )
 
 //TODO
+/*
+NEEDED:
+Team Number Input
+Menu for Event Mode (Secured)
+
+
+ */
 func buildGUI() {
 
 	var inTE, outTE *walk.TextEdit
@@ -30,4 +37,8 @@ func buildGUI() {
 			},
 		},
 	}.Run()
+}
+
+func buildUserInput() declarative.Widget {
+	return nil
 }
