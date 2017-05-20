@@ -27,9 +27,9 @@ func main() {
 		teams := eventconfig.GetTeams()
 		eventconfig.GetAllImages(teams)
 		util.Debug("Starting GUI with event security enabled.")
-		if _, err := gui.DrawGUI(true); err != nil {
-			panic(err)
-		}
+	}
+	if _, err := gui.DrawGUI(EventMode); err != nil {
+		panic(err)
 	}
 
 	netconfig.GetNETINT_LAN_GUID()
