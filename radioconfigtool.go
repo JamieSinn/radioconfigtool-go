@@ -8,6 +8,7 @@ import (
 	"firstinspires.org/radioconfigtool/util"
 	"firstinspires.org/radioconfigtool/resources"
 	"firstinspires.org/radioconfigtool/netconfig"
+	"firstinspires.org/radioconfigtool/gui"
 )
 
 var (
@@ -25,6 +26,10 @@ func main() {
 		util.Debug("Downloading all OpenWRT images for teams.")
 		teams := eventconfig.GetTeams()
 		eventconfig.GetAllImages(teams)
+		util.Debug("Starting GUI with event security enabled.")
+		if _, err := gui.DrawGUI(true); err != nil {
+			panic(err)
+		}
 	}
 
 	netconfig.GetNETINT_LAN_GUID()

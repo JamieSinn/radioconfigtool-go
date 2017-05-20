@@ -4,14 +4,7 @@ import (
 	. "github.com/lxn/walk/declarative"
 )
 
-func temp() {
-
-	if _, err := drawGUI(); err != nil {
-		panic(err)
-	}
-}
-
-func drawGUI() (int, error) {
+func DrawGUI(event bool) (int, error) {
 
 	return MainWindow{
 		Title:   "FRC Radio Configuration Utility",
@@ -21,7 +14,7 @@ func drawGUI() (int, error) {
 			Color: 0xDFDFDC,
 		},
 		Children: []Widget{
-			getUserInputs(),
+			getUserInputs(event),
 			VSpacer{
 				Row:        1,
 				Column:     0,
@@ -62,7 +55,7 @@ func getConfigureButton() Widget {
 	}
 }
 
-func getUserInputs() Widget {
+func getUserInputs(event bool) Widget {
 	return Composite{
 		Column:     0,
 		Row:        0,
@@ -91,12 +84,12 @@ func getUserInputs() Widget {
 				Font: tahoma(72, false),
 			},
 
-			// Second Row
 			Label{
 				Row:    1,
 				Column: 0,
 				Text:   "WPA Key:",
 				Font:   tahoma(50, true),
+				Visible: !event,
 			},
 			LineEdit{
 				Row:        1,
@@ -109,9 +102,11 @@ func getUserInputs() Widget {
 				MinSize:            Size{Width: 250, Height: 25},
 				MaxSize:            Size{Width: 250, Height: 25},
 
-				Font: tahoma(72, false),
+				Font:     tahoma(72, false),
+				Visible: !event,
 			},
 		},
+
 	}
 }
 
@@ -216,3 +211,4 @@ func tahoma(pointsize int, bold bool) Font {
 		PointSize: pointsize,
 	}
 }
+

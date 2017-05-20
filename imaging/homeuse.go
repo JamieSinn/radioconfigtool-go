@@ -17,6 +17,8 @@ func sendConfiguration() {
 	if !valid {
 		//Invalid radio response
 	}
+	//Send config string
+	conn.Write([]byte("SOME CONFIG STRING THAT IS BUILT\n"))
 }
 
 func checkRadioResponse(conn net.Conn) bool {
