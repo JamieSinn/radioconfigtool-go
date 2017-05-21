@@ -2,6 +2,12 @@ package gui
 
 import (
 	. "github.com/lxn/walk/declarative"
+	"github.com/lxn/walk"
+)
+
+var (
+	teamNumber, wpaKey *walk.LineEdit
+	mainWindow *walk.MainWindow
 )
 
 func DrawGUI(event bool) (int, error) {
@@ -10,11 +16,13 @@ func DrawGUI(event bool) (int, error) {
 		Title:   "FRC Radio Configuration Utility",
 		MinSize: Size{1280, 720},
 		Layout:  Grid{},
+		AssignTo: &mainWindow,
 		Background: SolidColorBrush{
 			Color: 0xDFDFDC,
 		},
 		Children: []Widget{
 			getUserInputs(event),
+
 			VSpacer{
 				Row:        1,
 				Column:     0,
@@ -48,6 +56,8 @@ func getConfigureButton() Widget {
 		Row:        2,
 		Text:       "Configure",
 		OnClicked: func() {
+			walk.MsgBox(mainWindow, "Configuring...", "Configuring the radio for team " + teamNumber.Text() + "...", walk.MsgBoxIconInformation)
+
 			//TODO: Handle configuration
 		},
 		//Image:
@@ -74,7 +84,7 @@ func getUserInputs(event bool) Widget {
 				Column:     1,
 				ColumnSpan: 2,
 				Name:       "Team Number",
-				//AssignTo: &te,
+				AssignTo: &teamNumber,
 				ToolTipText:        "Enter team number",
 				MaxLength:          4,
 				AlwaysConsumeSpace: true,
@@ -95,7 +105,7 @@ func getUserInputs(event bool) Widget {
 				Row:        1,
 				Column:     1,
 				ColumnSpan: 2,
-				//AssignTo: &te,
+				AssignTo: &wpaKey,
 				ToolTipText:        "Enter WPA Key",
 				MaxLength:          4,
 				AlwaysConsumeSpace: true,
