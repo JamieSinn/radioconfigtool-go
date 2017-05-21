@@ -8,16 +8,13 @@ import (
 	"firstinspires.org/radioconfigtool/netconfig"
 	"strings"
 	"bytes"
-)
-
-const (
-	fmsURL = "http://10.0.100.5/imaging/images/"
+	"firstinspires.org/radioconfigtool/config"
 )
 
 func getImage(fileName string) {
-	netconfig.ResetNetworkAdapter(netconfig.NETINT_WLAN)
+	netconfig.ResetNetworkAdapter(config.NETINT_WLAN)
 
-	url := fmsURL + fileName
+	url := config.FMSUrl + fileName
 
 	output, err := os.Create(fileName)
 	if err != nil {
@@ -41,7 +38,7 @@ func getImage(fileName string) {
 }
 
 func GetTeams() []string {
-	url := fmsURL + "teams.txt"
+	url := config.FMSUrl + "teams.txt"
 	response, err := http.Get(url)
 	if err != nil {
 		fmt.Println("Error while downloading", url, "-", err)

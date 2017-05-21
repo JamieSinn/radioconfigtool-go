@@ -7,13 +7,7 @@ import (
 	"bytes"
 
 	"fmt"
-)
-
-const (
-	// NETINT_LAN is the interface name to use for imaging/configuration
-	NETINT_LAN = "LAN"
-	//NETINT_WLAN is the interface name that is used to connect to the FMS
-	NETINT_WLAN = "WLAN"
+	"firstinspires.org/radioconfigtool/config"
 )
 
 var (
@@ -27,7 +21,7 @@ func ResetNetworkAdapter(inter string) {
 }
 
 func SetNetworkAdapterIP(ip, netmask, gateway string) {
-	exec.Command("netsh", "interface", "ipv4", "set", "address", "name=\""+NETINT_LAN+"\"", "static",
+	exec.Command("netsh", "interface", "ipv4", "set", "address", "name=\""+config.NETINT_LAN+"\"", "static",
 		ip, netmask, gateway)
 }
 
@@ -43,7 +37,7 @@ func GetNETINT_LAN_GUID() {
 	split := strings.Split(raw, ",")
 	for i, s := range split {
 		fmt.Println(s)
-		if s == NETINT_LAN {
+		if s == config.NETINT_LAN {
 			NETINT_LAN_GUID = strings.Replace(split[i+3], "Tcpip", "NPF", -1)
 			return
 		}
