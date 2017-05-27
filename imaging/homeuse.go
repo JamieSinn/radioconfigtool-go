@@ -7,9 +7,9 @@ import (
 	"strings"
 )
 
-func sendConfiguration() {
-	netconfig.SetNetworkAdapterIP("192.168.1.2", "255.255.255.0", "192.168.1.1")
+func sendConfiguration(data string) {
 	conn, err := net.Dial("tcp", "192.168.1.1:8888")
+	defer conn.Close()
 	if err != nil {
 		// Could not connect
 	}
@@ -18,7 +18,13 @@ func sendConfiguration() {
 		//Invalid radio response
 	}
 	//Send config string
-	conn.Write([]byte("SOME CONFIG STRING THAT IS BUILT\n"))
+
+	conn.Write([]byte(data+"\n"))
+}
+
+func Configure(config Radio) {
+	netconfig.SetNetworkAdapterIP("192.168.1.2", "255.255.255.0", "192.168.1.1")
+	sendConfiguration("")
 }
 
 func checkRadioResponse(conn net.Conn) bool {
