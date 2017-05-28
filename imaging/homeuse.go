@@ -28,7 +28,7 @@ func Configure(config Radio) {
 }
 
 func checkRadioResponse(conn net.Conn) bool {
-	ret := false;
+	ret := false
 	result, err := ioutil.ReadAll(conn)
 	if err != nil {
 		panic(err)

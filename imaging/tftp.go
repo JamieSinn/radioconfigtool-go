@@ -8,6 +8,9 @@ import (
 	"github.com/pin/tftp"
 )
 
+// OpenMesh looks for 192.168.100.8 for the tftp server/client.
+
+
 // readHandler is called when client starts file download from server
 func readHandler(filename string, rf io.ReaderFrom) error {
 	file, err := os.Open(filename)
