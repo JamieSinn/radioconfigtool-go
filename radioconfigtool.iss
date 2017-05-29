@@ -3,7 +3,7 @@
 
 #define MyAppName "FRC Radio Configuration Utility"
 ; TODO: SET AS ARG FOR VERSION
-#define MyAppVersion "2017.{BUILD_NUMBER"
+#define MyAppVersion "2017.{BUILD_NUMBER}"
 #define MyAppPublisher "FIRST"
 #define MyAppURL "https://firstinspires.org/"
 #define MyAppExeName "radioconfigtool.exe"
@@ -35,7 +35,6 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 [Files]
 ; TODO: MUST SET AS ARG FOR DIFFERENT RELEASES
 Source: "dist\radioconfigtool.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "dist\ap51-flash.exe"; DestDir: "{app}"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]

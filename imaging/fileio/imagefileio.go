@@ -17,15 +17,15 @@ const (
 )
 
 type RouterImage struct {
-	RouterType    int
 	Description   string
 	Path          string
 	EmbeddedImage []byte
 	Size          int
+	ExpectedSize  int
 	Files         []RouterImageFile
 }
 
-func (router RouterImage) getFile(filename string) (RouterImageFile, error) {
+func (router RouterImage) GetFile(filename string) (RouterImageFile, error) {
 	for _, f := range router.Files {
 		if f.Name == filename {
 			return f, nil

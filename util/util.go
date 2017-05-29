@@ -12,3 +12,10 @@ func Debug(message ...interface{}) {
 		fmt.Println(message)
 	}
 }
+
+// Logs out to the logging file. Only used in competition mode.
+func Log(message ...interface{}) {
+	if config.EventMode {
+
+	}
+}
