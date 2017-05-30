@@ -8,6 +8,7 @@ import (
 
 	"fmt"
 	"firstinspires.org/radioconfigtool/config"
+	"firstinspires.org/radioconfigtool/util"
 )
 
 var (
@@ -34,9 +35,10 @@ func GetNETINT_LAN_GUID() {
 	buffer.ReadFrom(output)
 	raw := buffer.String()
 	raw = strings.Replace(raw, "\"", "", -1)
+	raw = strings.Replace(raw, "\r", ",", -1)
 	split := strings.Split(raw, ",")
 	for i, s := range split {
-		fmt.Println(s)
+		util.Debug("Found network interface: \""+s+"\"")
 		if s == config.NETINT_LAN {
 			NETINT_LAN_GUID = strings.Replace(split[i+3], "Tcpip", "NPF", -1)
 			return

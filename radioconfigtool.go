@@ -14,11 +14,6 @@ import (
 
 func main() {
 
-	if runtime.GOOS != "windows" {
-		fmt.Println("The configuration tool has only been built for Windows. Please use a different computer.")
-		return
-	}
-
 	if config.EventMode {
 		util.Debug("Downloading all OpenWRT images for teams.")
 		teams := eventconfig.GetTeams()

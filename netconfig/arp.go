@@ -1,37 +1,47 @@
 package netconfig
 
 import (
-	"firstinspires.org/radioconfigtool/imaging"
-	"github.com/mdlayher/arp"
+	"bytes"
+	"log"
 	"net"
-	"firstinspires.org/radioconfigtool/config"
+	"github.com/google/gopacket"
+	"github.com/google/gopacket/layers"
+	"github.com/google/gopacket/pcap"
+	"fmt"
+	"time"
+	"firstinspires.org/radioconfigtool/util"
 )
 
+// ReadARP watches a handle for incoming ARP requests from the OpenMesh radios.
+// ReadARP loops until the Destination Hardware Address is not an empty string.
+func ReadARP() *layers.ARP {
+	handle, err := pcap.OpenLive(NETINT_LAN_GUID, 65536, true, time.Minute)
 
-const (
-	PACKET_BUFF_LEN = 2000
-)
-// This lovely mess of code (that is to be written) sends an ARP request out to radios to identify them and grab their hardware version
-
-func GetRadioHardwareAddress() net.HardwareAddr {
-	SetNetworkAdapterIP("192.168.100.8", "255.255.255.0", "192.168.100.1")
-
-	ifi, err := net.InterfaceByName(config.NETINT_LAN)
 	if err != nil {
-
+		util.Debug(err)
+		return nil
 	}
-	client, err := arp.Dial(ifi)
-	if err != nil {
 
+	src := gopacket.NewPacketSource(handle, layers.LayerTypeEthernet)
+	in := src.Packets()
+	for {
+		var packet gopacket.Packet
+		select {
+		case packet = <-in:
+			arpLayer := packet.Layer(layers.LayerTypeARP)
+			if arpLayer == nil {
+				continue
+			}
+			arp := arpLayer.(*layers.ARP)
+			if arp.Operation == layers.ARPRequest {
+				util.Debug("Got arp request")
+				util.Debug(arp)
+				util.Debug(string(arp.DstHwAddress))
+
+				if string(arp.DstHwAddress) != "" {
+					return arp
+				}
+			}
+		}
 	}
-	addr, err := client.Resolve(net.IP{192, 168, 100, 9})
-	if err != nil {
-
-	}
-	return addr
-}
-
-func GetRadioType() imaging.RobotRadio {
-
-	return imaging.OM5P_AN
 }
