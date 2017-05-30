@@ -1,9 +1,7 @@
 package imaging
 
 import (
-	"os/exec"
 	"firstinspires.org/radioconfigtool/netconfig"
-	"strconv"
 	"net"
 	"io/ioutil"
 	"firstinspires.org/radioconfigtool/util"
@@ -37,18 +35,15 @@ func (r Radio) OM5P_AN_init() {
 	r.DefaultNetwork = "192.168.1."
 }
 
-func (r Radio) OMP5_AC_init() {
+func (r Radio) OM5P_AC_init() {
 	r.DefaultIP = "192.168.1.1"
 	r.DefaultNetwork = "192.168.1."
 }
 
-func (r Radio) OPM5_Flash() {
+func (r Radio) OM5P_Flash() {
 	netconfig.SetNetworkAdapterIP(r.DefaultNetwork+"2", "255.255.255.0", r.DefaultIP)
-	exec.Command("ap51-flash.exe", "\""+netconfig.NETINT_LAN_GUID+"\"", strconv.Itoa(r.Team)+"-AN.bin", strconv.Itoa(r.Team)+"-AC.bin")
-}
-
-func Ping(addr string) {
-
+	// Replace with new flashing system
+	//exec.Command("ap51-flash.exe", "\""+netconfig.NETINT_LAN_GUID+"\"", strconv.Itoa(r.Team)+"-AN.bin", strconv.Itoa(r.Team)+"-AC.bin")
 }
 
 func CheckImage() bool {
@@ -79,7 +74,4 @@ func CheckImage() bool {
 		}
 	}(conn)
 	return ret
-}
-func handleConnection(conn net.Conn) {
-
 }

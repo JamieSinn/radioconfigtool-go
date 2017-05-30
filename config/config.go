@@ -5,7 +5,6 @@ var (
 	EventMode = false
 	// PracticeFieldMode is only used for events with official practice fields (Championships, District Championships)
 	PracticeFieldMode = false
-
 )
 
 const (

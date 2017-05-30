@@ -52,11 +52,10 @@ func GetTeams() []string {
 	return teams
 }
 
-
 func GetAllImages(teams []string) {
 
 	for _, team := range teams {
-		getImage(team+"-AN.bin")
-		getImage(team+"-AC.bin")
+		getImage(team + "-AN.bin")
+		getImage(team + "-AC.bin")
 	}
 }

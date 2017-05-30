@@ -50,3 +50,13 @@ And
 8. Now just copy both libwpcap.a and libpacket.a to C:\WpdPack\Lib\x64
 
 _Win x64 compilation instructions from [Stack Overflow](https://stackoverflow.com/questions/38047858/compile-gopacket-on-windows-64bit)_
+
+
+# To Do List
+
+- Create a cycle system of sorts for each team (From team number entered to configuration completed)
+- Code cleanup, remove un-needed code, and document
+- Figure out a flow of operations for how the cycle will work
+- Resources (images, firmwares) added to the go-bindata resource folder.
+- Setup an rsrc script to inject the manifest into the final exe
+- Unit testing setup

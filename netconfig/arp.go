@@ -1,21 +1,16 @@
 package netconfig
 
 import (
-	"bytes"
-	"log"
-	"net"
 	"github.com/google/gopacket"
 	"github.com/google/gopacket/layers"
 	"github.com/google/gopacket/pcap"
-	"fmt"
-	"time"
 	"firstinspires.org/radioconfigtool/util"
 )
 
 // ReadARP watches a handle for incoming ARP requests from the OpenMesh radios.
 // ReadARP loops until the Destination Hardware Address is not an empty string.
 func ReadARP() *layers.ARP {
-	handle, err := pcap.OpenLive(NETINT_LAN_GUID, 65536, true, time.Minute)
+	handle, err := pcap.OpenLive(NETINT_LAN_GUID, 65536, true, pcap.BlockForever)
 
 	if err != nil {
 		util.Debug(err)

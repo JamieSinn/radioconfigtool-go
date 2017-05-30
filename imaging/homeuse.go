@@ -19,7 +19,7 @@ func sendConfiguration(data string) {
 	}
 	//Send config string
 
-	conn.Write([]byte(data+"\n"))
+	conn.Write([]byte(data + "\n"))
 }
 
 func Configure(config Radio) {
@@ -41,5 +41,3 @@ func checkRadioResponse(conn net.Conn) bool {
 	}
 	return ret
 }
-
-

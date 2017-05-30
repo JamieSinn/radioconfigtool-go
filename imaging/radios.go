@@ -8,7 +8,7 @@ import (
 )
 
 var (
-	OM5P_AC = RobotRadio{
+	OM5P_AC = RobotRouter{
 		Image: fileio.RouterImage{
 			Path:         "firmwareOM5PAC.bin",
 			ExpectedSize: 3180218,
@@ -17,7 +17,7 @@ var (
 		ARPString: "OM5PAC",
 		ConfigIP:  []byte{192, 168, 100, 9},
 	}
-	OM5P_AN = RobotRadio{
+	OM5P_AN = RobotRouter{
 		Image: fileio.RouterImage{
 			Path:         "firmwareOM5PAN.bin",
 			ExpectedSize: 3180361,
@@ -26,39 +26,40 @@ var (
 		ARPString: "OM5PAN",
 		ConfigIP:  []byte{192, 168, 100, 9},
 	}
-	// Other radio models can be added here for future changes
-	radios = RobotRadioList{OM5P_AN, OM5P_AC}
+	// Other router models can be added here for future changes
+	routers = RobotRadioList{OM5P_AN, OM5P_AC}
 )
 
-type RobotRadio struct {
+type RobotRouter struct {
 	Image     fileio.RouterImage
 	Model     string
 	ARPString string
 	ConfigIP  []byte
 }
 
-type RobotRadioList []RobotRadio
+type RobotRadioList []RobotRouter
 
-func (radio RobotRadio) VerifyImage() {
-	data, err := ioutil.ReadFile(radio.Image.Path)
+func (router RobotRouter) VerifyImage() {
+	data, err := ioutil.ReadFile(router.Image.Path)
 
 	if err != nil {
-		panic("Could not find image for " + radio.Model + " at " + radio.Image.Path)
+		panic("Could not find image for " + router.Model + " at " + router.Image.Path)
 	}
 
-	if fileio.VerifyImage(data, radio.Image, radio.Image.ExpectedSize) {
-		panic("Could not verify image for " + radio.Model + " at " + radio.Image.Path)
+	if fileio.VerifyImage(data, router.Image, router.Image.ExpectedSize) {
+		panic("Could not verify image for " + router.Model + " at " + router.Image.Path)
 	}
 }
 
-func DetectRadio() RobotRadio {
+func DetectRadio() RobotRouter {
 
 	arpresp := netconfig.ReadARP()
 
-	for _, radio := range radios {
-		if bytes.Equal(arpresp.SourceProtAddress, radio.ConfigIP) &&
-			string(arpresp.DstHwAddress) == radio.ARPString {
-			return radio
+	for _, router := range routers {
+		if bytes.Equal(arpresp.SourceProtAddress, router.ConfigIP) &&
+			string(arpresp.DstHwAddress) == router.ARPString {
+			return router
 		}
 	}
+	return RobotRouter{}
 }

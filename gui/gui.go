@@ -1,20 +1,20 @@
 package gui
 
 import (
-	. "github.com/lxn/walk/declarative"
 	"github.com/lxn/walk"
+	. "github.com/lxn/walk/declarative"
 )
 
 var (
 	teamNumber, wpaKey *walk.LineEdit
-	mainWindow *walk.MainWindow
+	mainWindow         *walk.MainWindow
 )
 
 func DrawGUI(event bool) (int, error) {
 	return MainWindow{
-		Title:   "FRC Radio Configuration Utility",
-		MinSize: Size{1280, 720},
-		Layout:  Grid{},
+		Title:    "FRC Radio Configuration Utility",
+		MinSize:  Size{1280, 720},
+		Layout:   Grid{},
 		AssignTo: &mainWindow,
 		Background: SolidColorBrush{
 			Color: 0xDFDFDC,
@@ -55,7 +55,7 @@ func getConfigureButton() Widget {
 		Row:        2,
 		Text:       "Configure",
 		OnClicked: func() {
-			walk.MsgBox(mainWindow, "Configuring...", "Configuring the radio for team " + teamNumber.Text() + "...", walk.MsgBoxIconInformation)
+			walk.MsgBox(mainWindow, "Configuring...", "Configuring the radio for team "+teamNumber.Text()+"...", walk.MsgBoxIconInformation)
 
 			//TODO: Handle configuration
 		},
@@ -79,11 +79,11 @@ func getUserInputs(event bool) Widget {
 				Font:   tahoma(50, true),
 			},
 			LineEdit{
-				Row:        0,
-				Column:     1,
-				ColumnSpan: 2,
-				Name:       "Team Number",
-				AssignTo: &teamNumber,
+				Row:                0,
+				Column:             1,
+				ColumnSpan:         2,
+				Name:               "Team Number",
+				AssignTo:           &teamNumber,
 				ToolTipText:        "Enter team number",
 				MaxLength:          4,
 				AlwaysConsumeSpace: true,
@@ -94,24 +94,24 @@ func getUserInputs(event bool) Widget {
 			},
 
 			Label{
-				Row:    1,
-				Column: 0,
-				Text:   "WPA Key:",
-				Font:   tahoma(50, true),
+				Row:     1,
+				Column:  0,
+				Text:    "WPA Key:",
+				Font:    tahoma(50, true),
 				Visible: !event,
 			},
 			LineEdit{
-				Row:        1,
-				Column:     1,
-				ColumnSpan: 2,
-				AssignTo: &wpaKey,
+				Row:                1,
+				Column:             1,
+				ColumnSpan:         2,
+				AssignTo:           &wpaKey,
 				ToolTipText:        "Enter WPA Key",
 				MaxLength:          4,
 				AlwaysConsumeSpace: true,
 				MinSize:            Size{Width: 250, Height: 25},
 				MaxSize:            Size{Width: 250, Height: 25},
 
-				Font:     tahoma(72, false),
+				Font:    tahoma(72, false),
 				Visible: !event,
 			},
 		},
@@ -220,4 +220,3 @@ func tahoma(pointsize int, bold bool) Font {
 		PointSize: pointsize,
 	}
 }
-

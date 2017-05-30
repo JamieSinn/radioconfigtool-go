@@ -6,7 +6,6 @@ import (
 	"strings"
 	"bytes"
 
-	"fmt"
 	"firstinspires.org/radioconfigtool/config"
 	"firstinspires.org/radioconfigtool/util"
 )
@@ -26,7 +25,7 @@ func SetNetworkAdapterIP(ip, netmask, gateway string) {
 		ip, netmask, gateway)
 }
 
-// GetNETINT_LAN_GUID gets the GUID for the LAN interface for use with ap51-flash.
+// GetNETINT_LAN_GUID gets the GUID for the LAN interface for use with pcap
 func GetNETINT_LAN_GUID() {
 	getmac := exec.Command("getmac", "/nh", "/v", "/fo", "csv")
 	output, _ := getmac.StdoutPipe()
@@ -38,7 +37,7 @@ func GetNETINT_LAN_GUID() {
 	raw = strings.Replace(raw, "\r", ",", -1)
 	split := strings.Split(raw, ",")
 	for i, s := range split {
-		util.Debug("Found network interface: \""+s+"\"")
+		util.Debug("Found network interface: \"" + s + "\"")
 		if s == config.NETINT_LAN {
 			NETINT_LAN_GUID = strings.Replace(split[i+3], "Tcpip", "NPF", -1)
 			return
