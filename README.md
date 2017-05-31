@@ -60,3 +60,23 @@ _Win x64 compilation instructions from [Stack Overflow](https://stackoverflow.co
 - Resources (images, firmwares) added to the go-bindata resource folder.
 - Setup an rsrc script to inject the manifest into the final exe
 - Unit testing setup
+
+
+## Software Flow (Team Use)
+
+- Tool opens
+- Team enters their number
+- Instructions are on the page
+- Selects either program, or image buttons.
+- On selecting the program button, it sends the configuration string to the team. (pending changes to the config string and system) Return to main screen.
+- On selecting the image button, listens for ARP request, get radio model, flash radio model via tftp. Return to main screen.
+
+## Software Flow (Event Use)
+
+- Tool opens
+- Team enters their number
+- Instructions are on the page
+- Selects "Program"
+- Listens for ARP string and gets model
+- Flashes radio with image 
+- Upon the radio booting up again, the radio is configured (tbd method)
