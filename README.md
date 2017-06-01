@@ -54,12 +54,13 @@ _Win x64 compilation instructions from [Stack Overflow](https://stackoverflow.co
 
 # To Do List
 
-- Create a cycle system of sorts for each team (From team number entered to configuration completed)
+- ~~Create a cycle system of sorts for each team (From team number entered to configuration completed)~~
 - Code cleanup, remove un-needed code, and document
-- Figure out a flow of operations for how the cycle will work
+- ~~Figure out a flow of operations for how the cycle will work~~
 - Resources (images, firmwares) added to the go-bindata resource folder.
 - Setup an rsrc script to inject the manifest into the final exe
 - Unit testing setup
+- Encryption for configuration.
 
 
 ## Software Flow (Team Use)

@@ -2,9 +2,9 @@ package imaging
 
 import (
 	"firstinspires.org/radioconfigtool/netconfig"
-	"net"
-	"io/ioutil"
 	"firstinspires.org/radioconfigtool/util"
+	"io/ioutil"
+	"net"
 	"strings"
 )
 
