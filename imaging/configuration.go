@@ -19,14 +19,15 @@ func sendConfiguration(data string) {
 	}
 	//Send config string
 
-	conn.Write([]byte(data + "\n"))
+	conn.Write([]byte(data))
 }
 
-func Configure(config Radio) {
+func Configure(config RouterConfiguration) {
 	netconfig.SetNetworkAdapterIP("192.168.1.2", "255.255.255.0", "192.168.1.1")
-	sendConfiguration("")
+	sendConfiguration(EncryptConfigString(config.BuildConfigString()))
 }
 
+// TODO: Change based on radio config rewrite
 func checkRadioResponse(conn net.Conn) bool {
 	ret := false
 	result, err := ioutil.ReadAll(conn)

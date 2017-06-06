@@ -8,29 +8,15 @@ source code.
 into the binary.
 
 
-## Description
-This tool is designed to replace the current Java based tool for the following reasons:
-
-- The current tool is insecure as Java is compiled to bytecode, allowing for easy decompilation.
-- There is no security around the connection/configuration protocol used.
-  * Because of this, there are several severe security vulnerabilities that realistically cannot be fixed
-
-This new tool allows for much greater security, removing any configuration connection between
-the radio and configuration computer.
-
 ## How it works
-This configuration tool works off the idea of using pre-built images for each team when at competition.
-The images will be built on the FMS Server on Day 0 before teams arrive using a similar build script as
-the OpenWRT-Builder project. (Grabbing all teams from the _FIRST_ API for the event)
-
-This tool is currently designed only to replace the competition WPA Kiosk, though it could be extended to have
-a mode for practice/non-event use.
-
+This configuration tool is a re-write of the current Radio Configuration tool, with two key differences.
+- No longer written in Java, so decompilation to gain access to the source is no longer possible (Go compiles to machine code.)
+- Connection protocol is now encrypted - no longer possible to intercept and steal credentials without serious work.
 
 ## Development Requirements
 
 Because of the requirement of needing to intercept ARP packets, use of Google's gopacket library is required.
-Gopacket requires cgo as it binds to the C ```libpcap.h``` header.
+Gopacket requires cgo as it binds to the C `libpcap.h` header.
 
 1. Install go_amd64 (add go binaries to your PATH)
 2. Install TDM GCC x64 (add TDM-GCC binaries to your PATH) - Make sure to click the x86 and x64 option for TDM GCC. 
@@ -81,3 +67,20 @@ _Win x64 compilation instructions from [Stack Overflow](https://stackoverflow.co
 - Listens for ARP string and gets model
 - Flashes radio with image 
 - Upon the radio booting up again, the radio is configured (tbd method)
+
+## Packages
+
+- config
+  * Used to hold all configuration values that changes different parts of the program
+- fileio
+  * Used to read and parse OpenWRT Image files
+- gui
+  * Handles the GUI
+- imaging
+  * Used for flashing, and configuration of the router
+- netconfig
+  * Network based configuration, also handles network protocols.
+- resources
+  * Holds images, and any embedded resources
+- util
+  * Utility functions and methods

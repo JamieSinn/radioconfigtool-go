@@ -13,7 +13,7 @@ var (
 func DrawGUI(event bool) (int, error) {
 	return MainWindow{
 		Title:    "FRC Radio Configuration Utility",
-		MinSize:  Size{1280, 720},
+		MinSize:  Size{Width: 1280, Height: 720},
 		Layout:   Grid{},
 		AssignTo: &mainWindow,
 		Background: SolidColorBrush{

@@ -1,4 +1,4 @@
-package imaging
+package netconfig
 
 import (
 	"io"
@@ -6,21 +6,21 @@ import (
 	"fmt"
 	"time"
 	"github.com/pin/tftp"
-	"firstinspires.org/radioconfigtool/netconfig"
 	"bytes"
 	"firstinspires.org/radioconfigtool/util"
+	"firstinspires.org/radioconfigtool/imaging"
 )
 
 // OpenMesh looks for 192.168.100.8 for the tftp server/client.
 func TFTPInit() {
-	netconfig.SetNetworkAdapterIP("192.168.100.8", "255.255.255.0", "192.168.100.1")
+	SetNetworkAdapterIP("192.168.100.8", "255.255.255.0", "192.168.100.1")
 
 }
 
 // readHandler is called when client starts file download from server
 func readHandler(filename string, rf io.ReaderFrom) error {
 	// TODO: have a proper getter per cycle.
-	radio := DetectRadio()
+	radio := imaging.DetectRadio()
 
 	file, err := radio.Image.GetFile(filename)
 	if err != nil {

@@ -21,3 +21,4 @@ fabric.properties
 .idea
 *.iml
 radioconfigtool.exe
+dist/

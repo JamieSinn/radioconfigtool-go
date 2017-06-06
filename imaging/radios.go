@@ -1,10 +1,12 @@
 package imaging
 
 import (
-	"firstinspires.org/radioconfigtool/imaging/fileio"
+	"firstinspires.org/radioconfigtool/fileio"
 	"io/ioutil"
 	"firstinspires.org/radioconfigtool/netconfig"
 	"bytes"
+	"strconv"
+	"firstinspires.org/radioconfigtool/util"
 )
 
 var (
@@ -30,6 +32,28 @@ var (
 	routers = RobotRadioList{OM5P_AN, OM5P_AC}
 )
 
+// RouterConfiguration is used for building the configuration string that is sent to the router.
+type RouterConfiguration struct {
+	Mode        string
+	Team        string
+	SSID        string
+	WPAKey      string
+	Firewall    bool
+	DHCPEnabled bool
+	BWLimit     bool
+	RadioID_24  int
+	RadioID_5   int
+	Comment     string
+}
+
+func (conf RouterConfiguration) BuildConfigString() string {
+	return conf.Mode + "," + conf.Team + "," + conf.SSID + "," +
+		conf.WPAKey + "," + util.BoolToStr(conf.BWLimit) + "," + util.BoolToStr(conf.Firewall) + "," +
+		util.BoolToStr(conf.DHCPEnabled) + "," + strconv.Itoa(conf.RadioID_24) + "," + strconv.Itoa(conf.RadioID_5) + "," +
+		conf.Comment + ",\n"
+}
+
+// RobotRouter is used for the imaging/flashing procedure to hold the information regarding the image file.
 type RobotRouter struct {
 	Image     fileio.RouterImage
 	Model     string
@@ -37,6 +61,7 @@ type RobotRouter struct {
 	ConfigIP  []byte
 }
 
+// Type for array of all available radios
 type RobotRadioList []RobotRouter
 
 func (router RobotRouter) VerifyImage() {
@@ -51,6 +76,7 @@ func (router RobotRouter) VerifyImage() {
 	}
 }
 
+//
 func DetectRadio() RobotRouter {
 
 	arpresp := netconfig.ReadARP()
