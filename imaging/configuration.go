@@ -1,13 +1,12 @@
 package imaging
 
 import (
-	"firstinspires.org/radioconfigtool/netconfig"
 	"net"
 	"io/ioutil"
 	"strings"
 )
 
-func sendConfiguration(data string) {
+func SendConfiguration(data string) {
 	conn, err := net.Dial("tcp", "192.168.1.1:8888")
 	defer conn.Close()
 	if err != nil {
@@ -20,11 +19,6 @@ func sendConfiguration(data string) {
 	//Send config string
 
 	conn.Write([]byte(data))
-}
-
-func Configure(config RouterConfiguration) {
-	netconfig.SetNetworkAdapterIP("192.168.1.2", "255.255.255.0", "192.168.1.1")
-	sendConfiguration(EncryptConfigString(config.BuildConfigString()))
 }
 
 // TODO: Change based on radio config rewrite

@@ -20,7 +20,7 @@ func TFTPInit() {
 // readHandler is called when client starts file download from server
 func readHandler(filename string, rf io.ReaderFrom) error {
 	// TODO: have a proper getter per cycle.
-	radio := imaging.DetectRadio()
+	radio := imaging.RobotRouter{}
 
 	file, err := radio.Image.GetFile(filename)
 	if err != nil {

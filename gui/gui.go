@@ -3,6 +3,7 @@ package gui
 import (
 	"github.com/lxn/walk"
 	. "github.com/lxn/walk/declarative"
+	"errors"
 )
 
 var (
@@ -11,11 +12,17 @@ var (
 )
 
 func DrawGUI(event bool) (int, error) {
+
+	icon, err := walk.NewIconFromResourceId(7)
+	if err != nil {
+		return 0, errors.New("Failed to load icon from resources.")
+	}
 	return MainWindow{
 		Title:    "FRC Radio Configuration Utility",
 		MinSize:  Size{Width: 1280, Height: 720},
 		Layout:   Grid{},
 		AssignTo: &mainWindow,
+		Icon: icon,
 		Background: SolidColorBrush{
 			Color: 0xDFDFDC,
 		},

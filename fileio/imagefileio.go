@@ -17,12 +17,11 @@ const (
 )
 
 type RouterImage struct {
-	Description   string
-	Path          string
-	EmbeddedImage []byte
-	Size          int
-	ExpectedSize  int
-	Files         []RouterImageFile
+	Description  string
+	Path         string
+	Size         int
+	ExpectedSize int
+	Files        []RouterImageFile
 }
 
 func (router RouterImage) GetFile(filename string) (RouterImageFile, error) {

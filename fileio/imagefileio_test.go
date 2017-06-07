@@ -2,11 +2,11 @@ package fileio
 
 import (
 	"testing"
-	"io/ioutil"
+	"firstinspires.org/radioconfigtool/resources"
 )
 
 func TestVerifyImageOM5PAC(t *testing.T) {
-	data, err := ioutil.ReadFile("firmwareOM5PAC.bin")
+	data, err := resources.Asset("firmwareOM5PAC.bin")
 
 	if err != nil {
 		t.Fail()
@@ -18,7 +18,7 @@ func TestVerifyImageOM5PAC(t *testing.T) {
 }
 
 func TestVerifyImageOM5PAN(t *testing.T) {
-	data, err := ioutil.ReadFile("firmwareOM5PAN.bin")
+	data, err := resources.Asset("firmwareOM5PAN.bin")
 
 	if err != nil {
 		t.Fail()

@@ -1,6 +1,5 @@
 package imaging
 
-
 import (
 	"crypto/aes"
 	"crypto/cipher"
@@ -16,7 +15,7 @@ import (
 
 var key = config.ENCRYPTION_KEY
 
-func EncryptConfigString(str string) string{
+func EncryptConfigString(str string) string {
 
 	// Mode, Team Number, SSID, WPAKEY, Bandwidth limit, Firewall, DHCP Mode, 2.4GHz Radio ID, 5GHz Radio ID, Comment,\n(termination)
 	plaintext := []byte(str)

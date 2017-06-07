@@ -2,7 +2,15 @@
 set GOOS=windows
 set GOARCH=386
 set CGO_ENABLED=1
+
+REM Build Resource File
+echo Building Embedded Resource File (Manifest and icon)
+_buildtools\rsrc_windows_386.exe -manifest="_buildtools\radioconfigtool.manifest" -ico="_buildtools\frc_64x64_1Fb_icon.ico" -o="rsrc.syso"
+
 REM Event Build
-go build -o dist/FRCEventKiosk.exe -ldflags="-H windowsgui -X config/config.EventMode=true"
+echo Building Event Kiosk...
+go build -o _dist/FRCEventKiosk.exe -ldflags="-H windowsgui -X firstinspires.org/radioconfigtool/config.eventmode=true"
 REM Home Use Build
-go build -o dist/FRCHomeKiosk.exe -ldflags="-H windowsgui -X config/config.EventMode=false"
+echo Building Home Kiosk...
+go build -o _dist/FRCHomeKiosk.exe -ldflags="-H windowsgui -X firstinspires.org/radioconfigtool/config.eventmode=false"
+echo Done.

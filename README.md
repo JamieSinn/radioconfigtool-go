@@ -12,6 +12,8 @@ into the binary.
 This configuration tool is a re-write of the current Radio Configuration tool, with two key differences.
 - No longer written in Java, so decompilation to gain access to the source is no longer possible (Go compiles to machine code.)
 - Connection protocol is now encrypted - no longer possible to intercept and steal credentials without serious work.
+- Embedded TFTP Server for imaging (removes the need of ap51-flash.exe)
+- Listens for ARP requests to identify the model of radio
 
 ## Development Requirements
 
