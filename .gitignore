@@ -22,3 +22,5 @@ fabric.properties
 *.iml
 radioconfigtool.exe
 _dist/
+/gui/rsrc.syso
+/gui/gui.exe

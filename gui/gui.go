@@ -4,27 +4,41 @@ import (
 	"github.com/lxn/walk"
 	. "github.com/lxn/walk/declarative"
 	"errors"
+	"firstinspires.org/radioconfigtool/util"
 )
 
 var (
-	teamNumber, wpaKey *walk.LineEdit
-	mainWindow         *walk.MainWindow
+	WPAKey     *walk.LineEdit
+	TeamNumber *walk.LineEdit
+	Window     *walk.MainWindow
+	isEvent    bool
 )
+// Used for testing the GUI
+func main() {
+	DrawGUI(true,
+		func(team string) {
+			walk.MsgBox(Window, "Configuring...", "Configuring the radio for team "+TeamNumber.Text()+"...", walk.MsgBoxIconInformation)
+		},
+		func(flash bool, team, wpakey string) {
+			walk.MsgBox(Window, "Configuring...", "Configuring the radio for team "+TeamNumber.Text()+"...", walk.MsgBoxIconInformation)
+		})
+}
 
-func DrawGUI(event bool) (int, error) {
-
+func DrawGUI(event bool, competition func(team string), home func(flash bool, team, wpakey string)) (int, error) {
+	isEvent = event
 	icon, err := walk.NewIconFromResourceId(7)
 	if err != nil {
 		return 0, errors.New("Failed to load icon from resources.")
 	}
+
 	return MainWindow{
 		Title:    "FRC Radio Configuration Utility",
 		MinSize:  Size{Width: 1280, Height: 720},
 		Layout:   Grid{},
-		AssignTo: &mainWindow,
-		Icon: icon,
+		AssignTo: &Window,
+		Icon:     icon,
 		Background: SolidColorBrush{
-			Color: 0xDFDFDC,
+			Color: 0xDFDFDF,
 		},
 		Children: []Widget{
 			getUserInputs(event),
@@ -36,7 +50,7 @@ func DrawGUI(event bool) (int, error) {
 				Size:       2,
 			},
 
-			getConfigureButton(),
+			getConfigureButton(competition, home),
 
 			Composite{
 				Column:     0,
@@ -55,19 +69,64 @@ func DrawGUI(event bool) (int, error) {
 	}.Run()
 }
 
-func getConfigureButton() Widget {
-	return PushButton{
-		Column:     1,
-		ColumnSpan: 1,
-		Row:        2,
-		Text:       "Configure",
-		OnClicked: func() {
-			walk.MsgBox(mainWindow, "Configuring...", "Configuring the radio for team "+teamNumber.Text()+"...", walk.MsgBoxIconInformation)
+func getConfigureButton(competition func(team string), home func(flash bool, team, wpakey string)) Widget {
 
-			//TODO: Handle configuration
-		},
-		//Image:
-		Font: tahoma(30, true),
+	if isEvent {
+
+		return PushButton{
+			Column:     1,
+			ColumnSpan: 1,
+			Row:        2,
+			Text:       "Configure",
+			OnClicked: func() {
+				if !util.IsValidTeamNumber(TeamNumber.Text()) {
+					invalidTeam()
+					return
+				}
+				competition(TeamNumber.Text())
+			},
+			//Image:
+			Font: tahoma(30, true),
+		}
+	} else {
+		return Composite{
+			Column:     0,
+			ColumnSpan: 3,
+			Row:        2,
+			Layout:     Grid{},
+			Children: []Widget{
+				PushButton{
+					Column:     1,
+					ColumnSpan: 2,
+					Row:        0,
+					Text:       "Configure",
+					OnClicked: func() {
+						if !util.IsValidTeamNumber(TeamNumber.Text()) {
+							invalidTeam()
+							return
+						}
+						home(false, TeamNumber.Text(), WPAKey.Text())
+					},
+					//Image:
+					Font: tahoma(30, true),
+				},
+				PushButton{
+					Column:     3,
+					ColumnSpan: 1,
+					Row:        0,
+					Text:       "Flash",
+					OnClicked: func() {
+						if !util.IsValidTeamNumber(TeamNumber.Text()) {
+							invalidTeam()
+							return
+						}
+						home(true, TeamNumber.Text(), WPAKey.Text())
+					},
+					//Image:
+					Font: tahoma(30, true),
+				},
+			},
+		}
 	}
 }
 
@@ -90,7 +149,7 @@ func getUserInputs(event bool) Widget {
 				Column:             1,
 				ColumnSpan:         2,
 				Name:               "Team Number",
-				AssignTo:           &teamNumber,
+				AssignTo:           &TeamNumber,
 				ToolTipText:        "Enter team number",
 				MaxLength:          4,
 				AlwaysConsumeSpace: true,
@@ -111,7 +170,7 @@ func getUserInputs(event bool) Widget {
 				Row:                1,
 				Column:             1,
 				ColumnSpan:         2,
-				AssignTo:           &wpaKey,
+				AssignTo:           &WPAKey,
 				ToolTipText:        "Enter WPA Key",
 				MaxLength:          4,
 				AlwaysConsumeSpace: true,
@@ -175,7 +234,7 @@ func getProgrammingInstructions() Widget {
 
 func getResetInstructions() Widget {
 	return Composite{
-		Column:     1,
+		Column:     2,
 		Row:        0,
 		ColumnSpan: 1,
 		Layout:     Grid{},
@@ -226,4 +285,8 @@ func tahoma(pointsize int, bold bool) Font {
 		Bold:      bold,
 		PointSize: pointsize,
 	}
+}
+
+func invalidTeam() {
+	walk.MsgBox(Window, "Error", "Invalid Team Number. Team number must be 1-9999", walk.MsgBoxIconError)
 }

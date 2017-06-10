@@ -3,6 +3,7 @@ package util
 import (
 	"fmt"
 	"firstinspires.org/radioconfigtool/config"
+	"strconv"
 )
 
 // DEBUG messages and interfaces. Only prints if debug=true.
@@ -25,4 +26,16 @@ func BoolToStr(b bool) string {
 		return "1"
 	}
 	return "0"
+}
+
+func IsValidTeamNumber(team string) bool {
+	num, err := strconv.Atoi(team)
+	if err != nil {
+		return false
+	}
+	return validTeamNumber(num)
+}
+
+func validTeamNumber(team int) bool {
+	return team > 0 && team < 9999
 }

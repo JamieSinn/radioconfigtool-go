@@ -7,9 +7,14 @@ REM Build Resource File
 echo Building Embedded Resource File (Manifest and icon)
 _buildtools\rsrc_windows_386.exe -manifest="_buildtools\radioconfigtool.manifest" -ico="_buildtools\frc_64x64_1Fb_icon.ico" -o="rsrc.syso"
 
+REM Debug Build
+echo Building Debug Build...
+go build -o _dist/FRCDebug.exe -ldflags="-X firstinspires.org/radioconfigtool/config.eventmode=true"
+
 REM Event Build
 echo Building Event Kiosk...
 go build -o _dist/FRCEventKiosk.exe -ldflags="-H windowsgui -X firstinspires.org/radioconfigtool/config.eventmode=true -s -w"
+
 REM Home Use Build
 echo Building Home Kiosk...
 go build -o _dist/FRCHomeKiosk.exe -ldflags="-H windowsgui -X firstinspires.org/radioconfigtool/config.eventmode=false -s -w"

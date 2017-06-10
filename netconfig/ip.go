@@ -8,6 +8,11 @@ import (
 
 	"firstinspires.org/radioconfigtool/config"
 	"firstinspires.org/radioconfigtool/util"
+	"github.com/tatsushid/go-fastping"
+	"net"
+	"os"
+	"fmt"
+	"time"
 )
 
 var (
@@ -43,4 +48,30 @@ func GetNETINT_LAN_GUID() {
 			return
 		}
 	}
+}
+
+func Ping(ip string) bool {
+	ret := false
+	p := fastping.NewPinger()
+	ra, err := net.ResolveIPAddr("ip4:icmp", ip)
+	if err != nil {
+		util.Debug(err)
+		return false
+	}
+
+	p.AddIPAddr(ra)
+	p.MaxRTT = 5 * time.Second
+
+	p.OnRecv = func(addr *net.IPAddr, rtt time.Duration) {
+		util.Debug("IP Addr: " + addr.String() + " receive, RTT: " + rtt.String())
+		ret = true
+	}
+	p.OnIdle = func() {
+		util.Debug("Finished pinging " + ip)
+	}
+	err = p.Run()
+	if err != nil {
+		util.Debug(err)
+	}
+	return ret
 }

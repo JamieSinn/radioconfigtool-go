@@ -19,7 +19,6 @@ func EncryptConfigString(str string) string {
 
 	// Mode, Team Number, SSID, WPAKEY, Bandwidth limit, Firewall, DHCP Mode, 2.4GHz Radio ID, 5GHz Radio ID, Comment,\n(termination)
 	plaintext := []byte(str)
-	fmt.Printf("%s\n", plaintext)
 	ciphertext, err := encrypt(key, plaintext)
 	if err != nil {
 		log.Fatal(err)
@@ -34,7 +33,6 @@ func EncryptConfigString(str string) string {
 func DecryptConfigString(str string) string {
 
 	sDec, _ := base64.StdEncoding.DecodeString(str)
-	fmt.Printf("%0x\n", sDec)
 
 	result, err := decrypt(key, sDec)
 	if err != nil {
