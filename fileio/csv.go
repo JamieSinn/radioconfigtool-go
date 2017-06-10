@@ -6,7 +6,6 @@ import (
 	"encoding/csv"
 	"bufio"
 	"io"
-	"fmt"
 )
 
 var (

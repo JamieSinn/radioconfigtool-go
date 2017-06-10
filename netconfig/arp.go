@@ -40,5 +40,3 @@ func ReadARP() *layers.ARP {
 		}
 	}
 }
-
-

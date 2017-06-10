@@ -52,7 +52,6 @@ func main() {
 
 func Home(flash bool, team, wpakey string) {
 
-
 	/*
 	X- Tool opens
 	X- Team enters their number

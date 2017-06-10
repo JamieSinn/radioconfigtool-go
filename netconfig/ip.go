@@ -10,8 +10,6 @@ import (
 	"firstinspires.org/radioconfigtool/util"
 	"github.com/tatsushid/go-fastping"
 	"net"
-	"os"
-	"fmt"
 	"time"
 )
 
