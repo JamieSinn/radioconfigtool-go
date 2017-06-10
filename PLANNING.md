@@ -17,7 +17,7 @@ On Connection Send:
 
 ## Event Build
 
-Import CSV of WPA Keys - Locked to certain filepath
+~~Import CSV of WPA Keys - Locked to certain filepath (Current execution directory)~~
 
 ## Team Build
 

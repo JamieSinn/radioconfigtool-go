@@ -37,5 +37,5 @@ func IsValidTeamNumber(team string) bool {
 }
 
 func validTeamNumber(team int) bool {
-	return team > 0 && team < 9999
+	return team >= 1 && team <= 9999
 }

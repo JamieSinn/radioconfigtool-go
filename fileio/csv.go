@@ -6,6 +6,7 @@ import (
 	"encoding/csv"
 	"bufio"
 	"io"
+	"firstinspires.org/radioconfigtool/config"
 )
 
 var (
@@ -13,7 +14,7 @@ var (
 )
 
 func LoadKeys() {
-	f, err := os.Open("teams.csv")
+	f, err := os.Open(config.WPA_KEY_PATH)
 	if err != nil {
 		util.Debug(err)
 		return

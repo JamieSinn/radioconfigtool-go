@@ -17,5 +17,5 @@ go build -o _dist/FRCEventKiosk.exe -ldflags="-H windowsgui -X firstinspires.org
 
 REM Home Use Build
 echo Building Home Kiosk...
-go build -o _dist/FRCHomeKiosk.exe -ldflags="-H windowsgui -X firstinspires.org/radioconfigtool/config.eventmode=false -s -w"
+go build -o _dist/FRCHomeKiosk.exe -ldflags="-H windowsgui -X firstinspires.org/radioconfigtool/config.eventmode=false -X firstinspires.org/radioconfigtool/config.ENCRYPTION_KEY=IzLNm4rZK77TBCXopuRhufEP7x6UBOWl -s -w"
 echo Done.

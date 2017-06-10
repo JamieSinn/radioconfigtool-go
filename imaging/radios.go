@@ -21,6 +21,7 @@ type RouterConfiguration struct {
 	Comment     string
 }
 
+// Mode, Team Number, SSID, WPAKEY, Bandwidth limit, Firewall, DHCP Mode, 2.4GHz Radio ID, 5GHz Radio ID, Comment,\n(termination)
 func (conf RouterConfiguration) BuildConfigString() string {
 	return conf.Mode + "," + conf.Team + "," + conf.SSID + "," +
 		conf.WPAKey + "," + util.BoolToStr(conf.BWLimit) + "," + util.BoolToStr(conf.Firewall) + "," +

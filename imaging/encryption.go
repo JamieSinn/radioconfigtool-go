@@ -12,11 +12,10 @@ import (
 	"firstinspires.org/radioconfigtool/config"
 )
 
-var key = config.ENCRYPTION_KEY
+var key = []byte(config.ENCRYPTION_KEY)
 
 func EncryptConfigString(str string) string {
 
-	// Mode, Team Number, SSID, WPAKEY, Bandwidth limit, Firewall, DHCP Mode, 2.4GHz Radio ID, 5GHz Radio ID, Comment,\n(termination)
 	plaintext := []byte(str)
 	ciphertext, err := encrypt(key, plaintext)
 	if err != nil {
