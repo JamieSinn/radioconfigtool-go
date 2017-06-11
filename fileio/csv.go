@@ -13,6 +13,7 @@ var (
 	wpaKeys = make(map[string]string)
 )
 
+// LoadKeys loads the WPA Keys that the FMS exports during the Event Manager setup.
 func LoadKeys() {
 	f, err := os.Open(config.WPA_KEY_PATH)
 	if err != nil {
@@ -33,6 +34,7 @@ func LoadKeys() {
 	}
 }
 
+// GetTeamKey is an exported access to the wpaKeys map
 func GetTeamKey(team string) string {
 	return wpaKeys[team]
 }

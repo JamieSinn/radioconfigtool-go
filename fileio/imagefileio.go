@@ -16,6 +16,8 @@ const (
 	FWUPGRADECFG_SIG = "fwupgrade.cfg.sig"
 )
 
+// RouterImage is the type to contain the information that's needed to image a radio using the contained image.
+// It holds anything needed by the custom flashing tool.
 type RouterImage struct {
 	Description  string
 	Path         string
@@ -24,6 +26,7 @@ type RouterImage struct {
 	Files        []RouterImageFile
 }
 
+// GetFile returns the RouterImageFile for the file contained within the combined ext image.
 func (router RouterImage) GetFile(filename string) (RouterImageFile, error) {
 	for _, f := range router.Files {
 		if f.Name == filename {
@@ -33,6 +36,7 @@ func (router RouterImage) GetFile(filename string) (RouterImageFile, error) {
 	return RouterImageFile{}, errors.New("File Not Found")
 }
 
+// RouterImageFile is a data holder for the individual files in the ce image.
 type RouterImageFile struct {
 	Offset int
 	Data   []byte
@@ -40,14 +44,17 @@ type RouterImageFile struct {
 	Name   string
 }
 
+// String() prints out the file's identifying information for debugging
 func (file RouterImageFile) String() string {
 	return file.Name + ": Offset:" + strconv.Itoa(file.Offset) + " Size:" + strconv.Itoa(file.Size)
 }
 
 // Translated version of ap51-flash's ce_verify
 // Returns true if the image is valid, returns false otherwise.
+// A valid image has all the files that are listed in the fwupgrade.cfg file
 func VerifyImage(data []byte, router RouterImage, expectedSize int) bool {
 
+	// return value
 	ret := 0
 	// Version of the combined ext router (formatting setup)
 	ce_version := 0
@@ -78,7 +85,7 @@ func VerifyImage(data []byte, router RouterImage, expectedSize int) bool {
 		return false
 	}
 
-	// Get version of the combined ext router
+	// Get version of the combined ext router - we only support version 1
 	ret, err := fmt.Sscanf(string(data), "CE%02x", &ce_version)
 
 	if err != nil {
@@ -107,7 +114,7 @@ func VerifyImage(data []byte, router RouterImage, expectedSize int) bool {
 
 	}
 
-	// Loop over all files that were found.
+	// Loop over all files that were listed in fwupgrade.cfg
 	for num_files > 0 {
 		// File name
 		file_name := ""
@@ -124,9 +131,11 @@ func VerifyImage(data []byte, router RouterImage, expectedSize int) bool {
 		switch ce_version {
 		case 1:
 			// Starting from num_files offset +1
-			// 32 len string (filename) - 8 len int (file size) - 32 len string (file md5)
+			// 32 len string (filename) - 8 len int zero padded (file size) - 32 len string (file md5)
 			// buff = 0?
 			ret, err = fmt.Sscanf(string(data[hdr_offset:]), "%32s%08x%32s", &file_name, &file_size, &file_md5)
+
+			// Make sure all three data points were found
 			if ret != 3 {
 				return false
 			}
@@ -136,15 +145,19 @@ func VerifyImage(data []byte, router RouterImage, expectedSize int) bool {
 			// Unsupported
 			return false
 		}
-
+		// Create a type to hold the information of this file
 		image_file := RouterImageFile{
 			Name:   file_name,
 			Size:   file_size,
 			Offset: file_offset,
+			// Take the data from the beginning of the offset, to the current offset plus the file size
 			Data:   data[file_offset:file_offset+file_size],
 		}
 
+		// Debug out the current file's info
 		util.Debug(image_file.String())
+
+		// Add this file to the master list
 		router.Files = append(router.Files, image_file)
 
 		// Shift the offset up to the next file
@@ -157,6 +170,7 @@ func VerifyImage(data []byte, router RouterImage, expectedSize int) bool {
 		if strings.HasPrefix(file_name, FWUPGRADECFG) {
 			// Check if the filename is fwupgrade.cfg and not the .sig file
 			if len(FWUPGRADECFG)+1 < len(file_name) && !strings.HasSuffix(file_name, ".sig") {
+				// Set the description for the file
 				description := data[len(FWUPGRADECFG)+1:]
 				router.Description = string(description)
 			}
@@ -176,7 +190,7 @@ func VerifyImage(data []byte, router RouterImage, expectedSize int) bool {
 			fwcfg_size = file_size
 		}
 
-		// increase total router size
+		// increase total image size
 		image_size += file_size
 	}
 	if image_size > expectedSize {

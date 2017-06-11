@@ -14,6 +14,8 @@ import (
 
 var key = []byte(config.ENCRYPTION_KEY)
 
+// EncryptConfigString takes a raw config string, encrypts it using AES-256, then base64
+// encodes that to make the string size smaller
 func EncryptConfigString(str string) string {
 
 	plaintext := []byte(str)
@@ -28,6 +30,8 @@ func EncryptConfigString(str string) string {
 	return sEnc
 }
 
+// DecryptConfigString decodes from a base64 string, and then decrypts the AES-256 string
+// and returns the raw config string.
 func DecryptConfigString(str string) string {
 
 	sDec, _ := base64.StdEncoding.DecodeString(str)

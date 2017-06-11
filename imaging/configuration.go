@@ -6,6 +6,7 @@ import (
 	"strings"
 )
 
+// Open a tcp socket, and send the config string to the radio.
 func SendConfiguration(data string) {
 	conn, err := net.Dial("tcp", "192.168.1.1:8888")
 	defer conn.Close()

@@ -6,7 +6,7 @@ Configuration tool for _FIRST_ Robotics Competition Robot Radios
 source code.
 - There are no pre-requisites to running a Go binary, as it has all the needed libraries and runtimes compiled
 into the binary.
-
+- Immense amount low level support and libraries. 
 
 ## How it works
 This configuration tool is a re-write of the current Radio Configuration tool, with two key differences.
@@ -45,10 +45,12 @@ _Win x64 compilation instructions from [Stack Overflow](https://stackoverflow.co
 - ~~Create a cycle system of sorts for each team (From team number entered to configuration completed)~~
 - Code cleanup, remove un-needed code, and document
 - ~~Figure out a flow of operations for how the cycle will work~~
-- Resources (images, firmwares) added to the go-bindata resource folder.
-- Setup an rsrc script to inject the manifest into the final exe
-- Unit testing setup
-- Encryption for configuration.
+~~- Resources (images, firmwares) added to the go-bindata resource folder.~~
+~~- Setup an rsrc script to inject the manifest into the final exe~~
+~~- Unit testing setup~~
+~~- Encryption for configuration.~~
+- TFTP Server setup
+- ARP Listener setup
 
 
 ## Software Flow (Team Use)

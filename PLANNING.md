@@ -5,15 +5,15 @@
 Encryption/Decryption Process:
 - Decode from base64
 - Decrypt using key
-- Check for illegal characters (Non AlphaNumeric) to prevent code injection (Marshall's injection exploit)
+- Check for illegal characters (Non AlphaNumeric) and illegal lengths to prevent code injection (Marshall's injection exploit)
 - Split based on comma delimited arguments
 - UCI Commandline with args
 
-On Connection Send:
+On Connection Send: (Will decide when Kevin sends the source for the programmer)
 - Model
 - Image Version
 - Current Configuration (encrypted and base64 encoded)
-- Team?
+- Team
 
 ## Event Build
 
@@ -21,9 +21,9 @@ On Connection Send:
 
 ## Team Build
 
-Different Encryption Key?
+~~Different Encryption Key~~
 
 ## Common
 
-OpenWRT Images embedded into executable to make it harder to extract
+~~OpenWRT Images embedded into executable to make it harder to extract~~
 

@@ -29,6 +29,8 @@ func SetNetworkAdapterIP(ip, netmask, gateway string) {
 }
 
 // GetNETINT_LAN_GUID gets the GUID for the LAN interface for use with pcap
+// Because pcap wants the device id, which for some reason is obscenely hard to get programmatically,
+// I elected to use Windows' built in utilities and parse the output instead.
 func GetNETINT_LAN_GUID() {
 	getmac := exec.Command("getmac", "/nh", "/v", "/fo", "csv")
 	output, _ := getmac.StdoutPipe()
@@ -48,6 +50,7 @@ func GetNETINT_LAN_GUID() {
 	}
 }
 
+// Send an ICMP Ping to the specified IP. If we got at least one reply, return true
 func Ping(ip string) bool {
 	ret := false
 	p := fastping.NewPinger()

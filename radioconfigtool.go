@@ -110,7 +110,7 @@ func Competition(team string) {
 		SSID:        team,
 		Firewall:    true,
 		BWLimit:     true,
-		DHCPEnabled: true,
+		DHCPEnabled: false,
 		RadioID_24:  0,
 		RadioID_5:   0,
 		Comment:     "",

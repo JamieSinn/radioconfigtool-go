@@ -36,6 +36,7 @@ func readHandler(filename string, rf io.ReaderFrom) error {
 	return nil
 }
 
+// TODO: Clean up initialization, and make it a bit easier to work with to serve the specific files.
 func StartTFTPServer() {
 	// use nil in place of handler to disable read or write operations
 	s := tftp.NewServer(readHandler, nil)

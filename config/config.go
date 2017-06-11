@@ -4,7 +4,7 @@ var (
 	// EventMode is toggled via go build. Used to enable or disable certain features for competition.
 	eventmode = "false"
 
-	// Encryption key for sending to radio.
+	// Encryption key for sending to radio. (Event Mode)
 	ENCRYPTION_KEY = "dsS`p%%Tu\"zT70=F*Mm7ivx[T~Mr@HcX"
 )
 
