@@ -5,13 +5,17 @@ import (
 	. "github.com/lxn/walk/declarative"
 	"errors"
 	"firstinspires.org/radioconfigtool/util"
+	"firstinspires.org/radioconfigtool/resources"
+	"image/jpeg"
+	"bytes"
+	"image"
 )
 
 var (
-	WPAKey     *walk.LineEdit
-	TeamNumber *walk.LineEdit
-	Window     *walk.MainWindow
-	isEvent    bool
+	WPAKey       *walk.LineEdit
+	TeamNumber   *walk.LineEdit
+	Window       *walk.MainWindow
+	isEvent      bool
 )
 // Used for testing the GUI
 func main() {
@@ -29,6 +33,20 @@ func DrawGUI(event bool, competition func(team string), home func(flash bool, te
 	icon, err := walk.NewIconFromResourceId(7)
 	if err != nil {
 		return 0, errors.New("Failed to load icon from resources.")
+	}
+
+/*
+	om5p, err := resources.Asset("om5p.png")
+
+	if err != nil {
+		return 0, errors.New("Failed to load OM5P Image from resources.")
+	}
+
+	jpegdata, err := jpeg.Decode(bytes.NewReader(om5p))
+*/
+
+	if err != nil {
+		return 0, errors.New("Failed to load OM5P Image from resources.")
 	}
 
 	return MainWindow{
@@ -64,7 +82,6 @@ func DrawGUI(event bool, competition func(team string), home func(flash bool, te
 					getResetInstructions(),
 				},
 			},
-
 		},
 	}.Run()
 }
