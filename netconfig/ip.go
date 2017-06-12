@@ -51,13 +51,12 @@ func GetNETINT_LAN_GUID() {
 }
 
 // Send an ICMP Ping to the specified IP. If we got at least one reply, return true
-func Ping(ip string) bool {
+func Ping(ip string) (bool, error) {
 	ret := false
 	p := fastping.NewPinger()
 	ra, err := net.ResolveIPAddr("ip4:icmp", ip)
 	if err != nil {
-		util.Debug(err)
-		return false
+		return false, err
 	}
 
 	p.AddIPAddr(ra)
@@ -72,7 +71,7 @@ func Ping(ip string) bool {
 	}
 	err = p.Run()
 	if err != nil {
-		util.Debug(err)
+		return false, err
 	}
-	return ret
+	return ret, nil
 }
