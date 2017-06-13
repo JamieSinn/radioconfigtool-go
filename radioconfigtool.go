@@ -67,8 +67,8 @@ func Home(flash bool, team, wpakey string) {
 		// Popup saying complete...
 	} else {
 		configuration := RouterConfiguration{
-			// Compat for 2.4 networks, possibly going to use both 2.4 and 5
-			Mode:        "AP24",
+			// Compat for 2.4 networks, create a 2.4 and 5ghz network.
+			Mode:        "AP25",
 			Team:        team,
 			WPAKey:      wpakey,
 			SSID:        team,
@@ -77,11 +77,23 @@ func Home(flash bool, team, wpakey string) {
 			DHCPEnabled: true,
 			RadioID_24:  0,
 			RadioID_5:   0,
-			Comment:     "",
+			Event:       "",
 		}
 		str := configuration.BuildConfigString()
 		enc := EncryptConfigString(str)
-		SendConfiguration(enc)
+		err := SendConfiguration(enc)
+
+		if err != nil {
+			switch err.Error() {
+			case "Invalid":
+				gui.InvalidResp()
+				return
+			case "OutOfDate":
+				gui.OutOfDate()
+				return
+			}
+		}
+
 	}
 }
 
@@ -113,11 +125,22 @@ func Competition(team string) {
 		DHCPEnabled: false,
 		RadioID_24:  0,
 		RadioID_5:   0,
-		Comment:     "",
+		Event:       "",
 	}
 	str := configuration.BuildConfigString()
 	enc := EncryptConfigString(str)
-	SendConfiguration(enc)
+	err := SendConfiguration(enc)
+
+	if err != nil {
+		switch err.Error() {
+		case "Invalid":
+			gui.InvalidResp()
+			return
+		case "OutOfDate":
+			//TODO: Flash radio.
+			break
+		}
+	}
 
 }
 

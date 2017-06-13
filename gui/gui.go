@@ -5,17 +5,13 @@ import (
 	. "github.com/lxn/walk/declarative"
 	"errors"
 	"firstinspires.org/radioconfigtool/util"
-	"firstinspires.org/radioconfigtool/resources"
-	"image/jpeg"
-	"bytes"
-	"image"
 )
 
 var (
-	WPAKey       *walk.LineEdit
-	TeamNumber   *walk.LineEdit
-	Window       *walk.MainWindow
-	isEvent      bool
+	WPAKey     *walk.LineEdit
+	TeamNumber *walk.LineEdit
+	Window     *walk.MainWindow
+	isEvent    bool
 )
 // Used for testing the GUI
 func main() {
@@ -35,15 +31,15 @@ func DrawGUI(event bool, competition func(team string), home func(flash bool, te
 		return 0, errors.New("Failed to load icon from resources.")
 	}
 
-/*
-	om5p, err := resources.Asset("om5p.png")
+	/*
+		om5p, err := resources.Asset("om5p.png")
 
-	if err != nil {
-		return 0, errors.New("Failed to load OM5P Image from resources.")
-	}
+		if err != nil {
+			return 0, errors.New("Failed to load OM5P Image from resources.")
+		}
 
-	jpegdata, err := jpeg.Decode(bytes.NewReader(om5p))
-*/
+		jpegdata, err := jpeg.Decode(bytes.NewReader(om5p))
+	*/
 
 	if err != nil {
 		return 0, errors.New("Failed to load OM5P Image from resources.")
@@ -305,5 +301,21 @@ func tahoma(pointsize int, bold bool) Font {
 }
 
 func invalidTeam() {
-	walk.MsgBox(Window, "Error", "Invalid Team Number. Team number must be 1-9999", walk.MsgBoxIconError)
+	ErrorBox( "Error", "Invalid Team Number. Team number must be 1-9999.")
+}
+
+func InvalidResp() {
+	ErrorBox( "Error", "Invalid Radio Response. Please make sure you are using a supported radio.")
+}
+
+func OutOfDate() {
+	ErrorBox( "Error", "Radio firmware is out of date, please re-image.")
+}
+
+func InfoBox(title, message string) {
+	walk.MsgBox(Window, title, message, walk.MsgBoxIconInformation)
+}
+
+func ErrorBox(title, message string) {
+	walk.MsgBox(Window, title, message, walk.MsgBoxIconError)
 }

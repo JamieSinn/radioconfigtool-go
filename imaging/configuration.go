@@ -5,9 +5,10 @@ import (
 	"io/ioutil"
 	"strings"
 	"errors"
-	"crypto/md5"
-	"encoding/hex"
 	"firstinspires.org/radioconfigtool/util"
+	"encoding/base64"
+	"firstinspires.org/radioconfigtool/config"
+	"strconv"
 )
 
 // Open a tcp socket, and send the config string to the radio.
@@ -17,48 +18,70 @@ func SendConfiguration(data string) error {
 	if err != nil {
 		return err
 	}
-	valid := checkRadioResponse(conn)
-	if !valid {
-		return errors.New("Radio replied with an invalid response.")
+
+	result, err := ioutil.ReadAll(conn)
+	if err != nil {
+		panic(err)
 	}
+	// String is a base64 encoded string to prevent immediate prying eyes.
+	// Must decode before use.
+	dec, _ := base64.StdEncoding.DecodeString(string(result))
+
+	// Split all lines for easier use
+	lines := strings.Split(string(dec), "\n")
+	// Check if the data received is valid
+	valid := IsValid(lines)
+
+	if !valid {
+		return errors.New("Invalid")
+	}
+
+	// Check if the radio image version is up to date.
+	uptodate := IsUpToDate(lines[1])
+
+	if !uptodate {
+		return errors.New("OutOfDate")
+	}
+
+	// Prepend the configuration string with a 1/0 if this is for competition.
+	// This is because the radio programmer needs to use the correct key to decrypt the string.
+	data = util.BoolToStr(config.EventMode()) + "," + data
 
 	_, err = conn.Write([]byte(data))
 	return err
 }
 
-func checkRadioResponse(conn net.Conn) bool {
-	ret := false
-	result, err := ioutil.ReadAll(conn)
-	if err != nil {
-		panic(err)
-	}
-
-	dec := DecryptConfigString(string(result))
-
-	ret = IsValid(dec)
-	return ret
-}
-
-func IsValid(str string) bool {
+func IsValid(lines []string) bool {
 	/*
 	Router reply:
-	Line0: Version of router image
-	Line1: Hash of version
-	Line2: Image build timestamp
-	Line3: Image build timestamp Hash
-	Line4: Config timestamp
-	Line5: Config timestamp hash
+	Line0: Model: {Hardware Enum}
+	Line1: Version: {OpenWRT Build Version}
+	Line2: Event: {EventInfo}
 	 */
-	lines := strings.Split(str, "\n")
 
-	for i := 0; i <= 4; i += 2 {
-		md := md5.New()
-		md.Write([]byte(lines[i]))
-		check := hex.EncodeToString(md.Sum(nil))
-		if check != lines[i+1] {
-			util.Debug("Checksum failed on router reply (intentionally?): " + str)
-			return false
-		}
+	if strings.HasPrefix(lines[0], "Model: ") &&
+		strings.HasPrefix(lines[1], "Version: ") &&
+		strings.HasPrefix(lines[2], "Event: ") {
+		return true
 	}
-	return true
+	return false
+}
+
+func IsUpToDate(verstr string) bool {
+
+	raw := verstr[9:]
+
+	major, err := strconv.Atoi(raw[:4])
+	if err != nil {
+		return false
+	}
+	minor, err := strconv.Atoi(raw[5:])
+	if err != nil {
+		return false
+	}
+	if config.MIN_BUILD_maj <= major &&
+		config.MIN_BUILD_min <= minor {
+		return true
+	}
+	return false
 }

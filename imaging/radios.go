@@ -18,15 +18,15 @@ type RouterConfiguration struct {
 	BWLimit     bool
 	RadioID_24  int
 	RadioID_5   int
-	Comment     string
+	Event       string
 }
 
-// Mode, Team Number, SSID, WPAKEY, Bandwidth limit, Firewall, DHCP Mode, 2.4GHz Radio ID, 5GHz Radio ID, Comment,\n(termination)
+// Mode, Team Number, SSID, WPAKEY, Bandwidth limit, Firewall, DHCP Mode, 2.4GHz Radio ID, 5GHz Radio ID, Event,\n(termination)
 func (conf RouterConfiguration) BuildConfigString() string {
 	return conf.Mode + "," + conf.Team + "," + conf.SSID + "," +
 		conf.WPAKey + "," + util.BoolToStr(conf.BWLimit) + "," + util.BoolToStr(conf.Firewall) + "," +
 		util.BoolToStr(conf.DHCPEnabled) + "," + strconv.Itoa(conf.RadioID_24) + "," + strconv.Itoa(conf.RadioID_5) + "," +
-		conf.Comment + ",\n"
+		conf.Event + ",\n"
 }
 
 // RobotRouter is used for the imaging/flashing procedure to hold the information regarding the image file.

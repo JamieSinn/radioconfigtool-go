@@ -17,11 +17,11 @@ func TestRouterConfiguration_BuildConfigString(t *testing.T) {
 		DHCPEnabled: true,
 		RadioID_24:  0,
 		RadioID_5:   0,
-		Comment:     "Comment",
+		Event:       "Event",
 	}
 	str := configuration.BuildConfigString()
 	util.Debug(str)
-	check := "AP24,1334,1334,,1,0,1,0,0,Comment,\n"
+	check := "AP24,1334,1334,,1,0,1,0,0,Event,\n"
 	if str != check {
 		t.Fail()
 	}

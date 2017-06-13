@@ -17,6 +17,10 @@ const (
 
 	// WPA_KEY_PATH - Where to import keys from during event.
 	WPA_KEY_PATH = "keys.csv"
+
+	// MIN_BUILD - Minimum build for the OpenWRT image to allow configuring.
+	MIN_BUILD_maj = 2017
+	MIN_BUILD_min = 2
 )
 
 func EventMode() bool {

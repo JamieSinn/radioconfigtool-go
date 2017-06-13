@@ -1,60 +1,81 @@
 package imaging
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestIsValid(t *testing.T) {
 	/*
 	Router reply:
-	Line0: Version of router image
-	Line1: Hash of version
-	Line2: Image build timestamp
-	Line3: Image build timestamp Hash
-	Line4: Config timestamp
-	Line5: Config timestamp hash
+	Line0: Model: {Hardware Enum}
+	Line1: Version: {OpenWRT Build Version}
+	Line2: Event: {EventInfo}
 	 */
 	reply := []string{
-		"1.0.0",
-		"47cd76e43f74bbc2e1baaf194d07e1fa",
-		"1497291398",
-		"b4712c28fc51ff04d8464888be87bbd9",
-		"1497291399",
-		"759462ea32fd38b55c1ba955f5df819b",
+		"Model: 1",
+		"Version: 2017.2",
+		"Event: ",
 	}
-	str := ""
-	for _, s := range reply {
-		str += s + "\n"
-	}
-	res := IsValid(str)
+
+	res := IsValid(reply)
 	if !res {
 		t.Fail()
 	}
 }
 
-
 func TestIsInValid(t *testing.T) {
 	/*
 	Router reply:
-	Line0: Version of router image
-	Line1: Hash of version
-	Line2: Image build timestamp
-	Line3: Image build timestamp Hash
-	Line4: Config timestamp
-	Line5: Config timestamp hash
+	Line0: Model: {Hardware Enum}
+	Line1: Version: {OpenWRT Build Version}
+	Line2: Event: {EventInfo}
 	 */
 	reply := []string{
-		"1.0.0",
-		"47cd76e43f74bbc2e1baaf194d07e1fa",
-		"1497291398",
-		"b4712c28fc51ff04d8464888be87bbd9",
-		"1497291399",
-		// Invalid hash
-		"759462ea32fd38b55c1ba955f5df8192",
+		"Model: 1",
+		"Version: 2017.2",
+		// No Space
+		"Event:",
 	}
-	str := ""
-	for _, s := range reply {
-		str += s + "\n"
+
+	res := IsValid(reply)
+	if res {
+		t.Fail()
 	}
-	res := IsValid(str)
+}
+
+func TestIsUpToDate(t *testing.T) {
+	/*
+	Router reply:
+	Line0: Model: {Hardware Enum}
+	Line1: Version: {OpenWRT Build Version}
+	Line2: Event: {EventInfo}
+	 */
+	reply := []string{
+		"Model: 1",
+		"Version: 2017.2",
+		"Event: ",
+	}
+
+	res := IsUpToDate(reply[1])
+	if !res {
+		t.Fail()
+	}
+}
+
+func TestIsOutOfDate(t *testing.T) {
+	/*
+	Router reply:
+	Line0: Model: {Hardware Enum}
+	Line1: Version: {OpenWRT Build Version}
+	Line2: Event: {EventInfo}
+	 */
+	reply := []string{
+		"Model: 1",
+		"Version: 2017.1",
+		"Event: ",
+	}
+
+	res := IsUpToDate(reply[1])
 	if res {
 		t.Fail()
 	}
