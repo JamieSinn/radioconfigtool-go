@@ -9,6 +9,7 @@ import (
 	"encoding/base64"
 	"firstinspires.org/radioconfigtool/config"
 	"strconv"
+	"time"
 )
 
 // Open a tcp socket, and send the config string to the radio.
@@ -43,7 +44,16 @@ func SendConfiguration(data string) error {
 		return errors.New("OutOfDate")
 	}
 
-	// Prepend the configuration string with a 1/0 if this is for competition.
+	// Check if the radio is attempted to be programmed while an event is going on
+	// by the team configuration build.
+	atevent := IsWithinCompetition(lines[2]) && config.EventMode()
+
+	if atevent {
+		return errors.New("AtEvent")
+	}
+
+
+	// Prepend the configuration string with a 1|0 if this is for competition.
 	// This is because the radio programmer needs to use the correct key to decrypt the string.
 	data = util.BoolToStr(config.EventMode()) + "," + data
 
@@ -81,6 +91,24 @@ func IsUpToDate(verstr string) bool {
 	}
 	if config.MIN_BUILD_maj <= major &&
 		config.MIN_BUILD_min <= minor {
+		return true
+	}
+	return false
+}
+
+func IsWithinCompetition(event string) bool {
+	if len(event) == 7 {
+		return false
+	}
+	raw := event[7:]
+
+	epoch, err := strconv.ParseInt(raw, 10, 64)
+	if err != nil {
+		return false
+	}
+
+	tm := time.Unix(epoch, 0)
+	if tm.Unix() > time.Now().Unix() {
 		return true
 	}
 	return false

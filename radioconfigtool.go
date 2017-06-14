@@ -65,6 +65,7 @@ func Home(flash bool, team, wpakey string) {
 		// Start TFTP Server
 		// Return once all files are requested.
 		// Popup saying complete...
+		//TODO: Flash radio
 	} else {
 		configuration := RouterConfiguration{
 			// Compat for 2.4 networks, create a 2.4 and 5ghz network.
@@ -91,9 +92,12 @@ func Home(flash bool, team, wpakey string) {
 			case "OutOfDate":
 				gui.OutOfDate()
 				return
+			case "AtEvent":
+				gui.ErrorBox("Error", "Your radio was last programmed at an event, and the event's expiry is in the future. " +
+					"To prevent connection issues, please wait until the event is over.")
+				return
 			}
 		}
-
 	}
 }
 
@@ -125,7 +129,7 @@ func Competition(team string) {
 		DHCPEnabled: false,
 		RadioID_24:  0,
 		RadioID_5:   0,
-		Event:       "",
+		Event:       fileio.GetTeamKey("EVENTEND"),
 	}
 	str := configuration.BuildConfigString()
 	enc := EncryptConfigString(str)
@@ -141,7 +145,6 @@ func Competition(team string) {
 			break
 		}
 	}
-
 }
 
 func DetectRadio() RobotRouter {
