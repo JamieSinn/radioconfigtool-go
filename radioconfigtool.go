@@ -7,6 +7,7 @@ import (
 	. "firstinspires.org/radioconfigtool/imaging"
 	"firstinspires.org/radioconfigtool/fileio"
 	"bytes"
+	"io"
 )
 
 var (
@@ -147,15 +148,18 @@ func Competition(team string) {
 	}
 }
 
-func DetectRadio() RobotRouter {
-
-	arpresp := netconfig.ReadARP()
-
-	for _, router := range validRouters {
-		if bytes.Equal(arpresp.SourceProtAddress, router.ConfigIP) &&
-			string(arpresp.DstHwAddress) == router.ARPString {
-			return router
+// Experimental flashing system
+func flash() {
+	// NOTE: BLOCKING THREAD
+	model := netconfig.WaitForRadioModel()
+	radio := RobotRouter{}
+	for _, r := range validRouters {
+		if model == r.ARPString {
+			radio = r
 		}
 	}
-	return RobotRouter{}
+	// NOTE: BLOCKING THREAD
+	netconfig.StartTFTPServer(radio.ReadHandler)
 }
+
+

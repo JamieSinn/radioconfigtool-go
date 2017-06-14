@@ -5,6 +5,8 @@ import (
 	"strconv"
 	"firstinspires.org/radioconfigtool/util"
 	"firstinspires.org/radioconfigtool/resources"
+	"io"
+	"bytes"
 )
 
 // RouterConfiguration is used for building the configuration string that is sent to the router.
@@ -35,6 +37,21 @@ type RobotRouter struct {
 	Model     string
 	ARPString string
 	ConfigIP  []byte
+}
+
+func (router RobotRouter) ReadHandler(filename string, rf io.ReaderFrom) error {
+		file, err := router.Image.GetFile(filename)
+		if err != nil {
+		util.Debug("Could not find requested file: " + filename)
+		return err
+		}
+		n, err := rf.ReadFrom(bytes.NewReader(file.Data))
+		if err != nil {
+		util.Debug("%v", err)
+		return err
+		}
+		util.Debug("%d bytes sent", n)
+		return nil
 }
 
 // Type for array of all available radios
