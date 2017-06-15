@@ -1,5 +1,7 @@
 package config
 
+import "time"
+
 var (
 	// EventMode is toggled via go build. Used to enable or disable certain features for competition.
 	eventmode = "false"
@@ -21,6 +23,9 @@ const (
 	// MIN_BUILD - Minimum build for the OpenWRT image to allow configuring.
 	MIN_BUILD_maj = 2017
 	MIN_BUILD_min = 2
+
+	// ARP_TIMEOUT - Maximum amount of time to wait for ARP requests.
+	ARP_TIMEOUT = 15 * time.Second
 )
 
 func EventMode() bool {

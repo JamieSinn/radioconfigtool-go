@@ -111,7 +111,7 @@ func Competition(team string) {
 	X- Instructions are on the page
 	X- Selects "Program"
 	X- Listens for ARP string and gets model
-	X- Flashes radio with image
+	- Flashes radio with image
 	- Upon the radio booting up again, the radio is configured
 	*/
 
@@ -149,17 +149,26 @@ func Competition(team string) {
 	}
 }
 
-// Experimental flashing system
-func flash() {
-	// NOTE: BLOCKING THREAD
-	model := netconfig.WaitForRadioModel()
-	radio := RobotRouter{}
+
+func getModel() RobotRouter {
+	model, err := netconfig.WaitForRadioModel()
+	if err != nil {
+		gui.ErrorBox("Error", "Failed to detect router type. Please unplug power from the router and try again.")
+		return nil
+	}
 	for _, r := range validRouters {
 		if model == r.ARPString {
-			radio = r
+			return r
 		}
 	}
+	return nil
+}
+// Experimental flashing system
+func flash(radio RobotRouter) {
 	go netconfig.StartTFTPServer(radio.ReadHandler)
+	serv := netconfig.TFTPServer
+	time.Sleep(time.Second * 30)
+	serv.Shutdown()
 }
 
 

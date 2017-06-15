@@ -6,13 +6,15 @@ import (
 	"github.com/google/gopacket/pcap"
 	"firstinspires.org/radioconfigtool/util"
 	"bytes"
-	"firstinspires.org/radioconfigtool/imaging"
+	"time"
+	"firstinspires.org/radioconfigtool/config"
+	"errors"
 )
 
 // ReadARP watches a handle for incoming ARP requests from the OpenMesh radios.
 // ReadARP loops until the Destination Hardware Address is not an empty string.
 // NOTE: This is threadblocking, and should be.
-func readARP() *layers.ARP {
+func readARP(timeout time.Duration) *layers.ARP {
 	handle, err := pcap.OpenLive(NETINT_LAN_GUID, 65536, true, pcap.BlockForever)
 
 	if err != nil {
@@ -40,12 +42,17 @@ func readARP() *layers.ARP {
 					return request
 				}
 			}
+		case <-time.After(timeout):
+			return nil
 		}
 	}
 }
 
+func WaitForRadioModel() (string, error) {
+	arpReq := readARP(config.ARP_TIMEOUT)
+	if arpReq == nil {
+		return "", errors.New("Timeout")
+	}
 
-func WaitForRadioModel() string {
-	arpReq := readARP()
-	return string(arpReq.DstHwAddress)
+	return string(arpReq.DstHwAddress), nil
 }
