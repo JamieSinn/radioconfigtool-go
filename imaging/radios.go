@@ -7,6 +7,7 @@ import (
 	"firstinspires.org/radioconfigtool/resources"
 	"io"
 	"bytes"
+	"github.com/pin/tftp"
 )
 
 // RouterConfiguration is used for building the configuration string that is sent to the router.
@@ -40,22 +41,21 @@ type RobotRouter struct {
 }
 
 func (router RobotRouter) ReadHandler(filename string, rf io.ReaderFrom) error {
-		file, err := router.Image.GetFile(filename)
-		if err != nil {
+
+	file, err := router.Image.GetFile(filename)
+	if err != nil {
 		util.Debug("Could not find requested file: " + filename)
 		return err
-		}
-		n, err := rf.ReadFrom(bytes.NewReader(file.Data))
-		if err != nil {
+	}
+	rf.(tftp.OutgoingTransfer).SetSize(int64(file.Size))
+	n, err := rf.ReadFrom(bytes.NewReader(file.Data))
+	if err != nil {
 		util.Debug("%v", err)
 		return err
-		}
-		util.Debug("%d bytes sent", n)
-		return nil
+	}
+	util.Debug("%d bytes sent", n)
+	return nil
 }
-
-// Type for array of all available radios
-type RobotRadioList []RobotRouter
 
 func (router RobotRouter) VerifyImage() {
 	data, err := resources.Asset(router.Image.Path)
@@ -68,3 +68,6 @@ func (router RobotRouter) VerifyImage() {
 		panic("Could not verify image for " + router.Model + " at " + router.Image.Path)
 	}
 }
+
+// Type for array of all available radios
+type RobotRadioList []RobotRouter

@@ -15,9 +15,9 @@ go build -o _dist/FRCHomeDebug.exe -ldflags="-X firstinspires.org/radioconfigtoo
 
 REM Event Build
 echo Building Event Kiosk...
-go build -o _dist/FRCEventKiosk.exe -ldflags="-H windowsgui -X firstinspires.org/radioconfigtool/config.eventmode=true -s -w"
+go build -o _dist/FRCEventKiosk.exe -ldflags="-H windowsgui -X firstinspires.org/radioconfigtool/config.eventmode=true -s -w" -gcflags=-trimpath=$GOPATH -asmflags=-trimpath=$GOPATH
 
 REM Home Use Build
 echo Building Home Kiosk...
-go build -o _dist/FRCHomeKiosk.exe -ldflags="-H windowsgui -X firstinspires.org/radioconfigtool/config.eventmode=false -X firstinspires.org/radioconfigtool/config.ENCRYPTION_KEY=IzLNm4rZK77TBCXopuRhufEP7x6UBOWl -s -w"
+go build -o _dist/FRCHomeKiosk.exe -ldflags="-H windowsgui -X firstinspires.org/radioconfigtool/config.eventmode=false -X firstinspires.org/radioconfigtool/config.ENCRYPTION_KEY=IzLNm4rZK77TBCXopuRhufEP7x6UBOWl -s -w" -gcflags=-trimpath=$GOPATH -asmflags=-trimpath=$GOPATH
 echo Done.

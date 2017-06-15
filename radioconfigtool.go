@@ -8,6 +8,7 @@ import (
 	"firstinspires.org/radioconfigtool/fileio"
 	"bytes"
 	"io"
+	"time"
 )
 
 var (
@@ -109,8 +110,8 @@ func Competition(team string) {
 	X- Team enters their number
 	X- Instructions are on the page
 	X- Selects "Program"
-	- Listens for ARP string and gets model
-	- Flashes radio with image
+	X- Listens for ARP string and gets model
+	X- Flashes radio with image
 	- Upon the radio booting up again, the radio is configured
 	*/
 
@@ -158,8 +159,7 @@ func flash() {
 			radio = r
 		}
 	}
-	// NOTE: BLOCKING THREAD
-	netconfig.StartTFTPServer(radio.ReadHandler)
+	go netconfig.StartTFTPServer(radio.ReadHandler)
 }
 
 
