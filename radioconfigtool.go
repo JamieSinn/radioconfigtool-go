@@ -66,6 +66,12 @@ func Home(flash bool, team, wpakey string) {
 		// Return once all files are requested.
 		// Popup saying complete...
 		//TODO: Flash radio
+
+		model := getModel()
+		if model.ARPString == "" {
+			return
+		}
+
 	} else {
 		configuration := RouterConfiguration{
 			// Compat for 2.4 networks, create a 2.4 and 5ghz network.

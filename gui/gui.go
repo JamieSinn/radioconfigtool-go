@@ -220,7 +220,7 @@ func getProgrammingInstructions() Widget {
 			Label{
 				Row:    2,
 				Column: 0,
-				Text:   "2) Make sure to use the \"802.3af\" Ethernet port as shown above.",
+				Text:   "2) Make sure to use the \"802.3af\" Ethernet port furthest from the power jack.",
 				Font:   tahoma(12, false),
 			},
 			Label{
@@ -255,37 +255,31 @@ func getResetInstructions() Widget {
 			Label{
 				Row:    0,
 				Column: 0,
-				Text:   "If asked to reset your wireless bridge:",
+				Text:   "If asked to flash your wireless bridge:",
 				Font:   tahoma(12, true),
 			},
 			Label{
 				Row:    1,
 				Column: 0,
-				Text:   "1) Connect power and Ethernet to the Wireless Bridge.",
+				Text:   "1) Connect Ethernet to the Wireless Bridge.",
 				Font:   tahoma(12, false),
 			},
 			Label{
 				Row:    2,
 				Column: 0,
-				Text:   "2) Make sure to use the \"802.3af\" Ethernet port as shown above.",
+				Text:   "2) Make sure to use the \"802.3af\" Ethernet port furthest from the power jack.",
 				Font:   tahoma(12, false),
 			},
 			Label{
 				Row:    3,
 				Column: 0,
-				Text:   "3) Wait for the Power light to turn and stay solid.",
+				Text:   "3) Fill in team number, select \"Flash\" and plug power into the bridge.",
 				Font:   tahoma(12, false),
 			},
 			Label{
 				Row:    4,
 				Column: 0,
-				Text:   "4) Enter your team number, and a WPA key (optional), above.",
-				Font:   tahoma(12, false),
-			},
-			Label{
-				Row:    5,
-				Column: 0,
-				Text:   "5) Press \"Configure\", the process should take 15-60 seconds.",
+				Text:   "4) Wait until the process is complete. (15-60 seconds). If the router is failed to be detected, restart flashing procedure.",
 				Font:   tahoma(12, false),
 			},
 		},
@@ -310,6 +304,10 @@ func InvalidResp() {
 
 func OutOfDate() {
 	ErrorBox( "Error", "Radio firmware is out of date, please re-image.")
+}
+
+func Complete() {
+	InfoBox("Success!", "The configuration process was successful!")
 }
 
 func InfoBox(title, message string) {

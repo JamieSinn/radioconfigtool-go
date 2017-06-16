@@ -14,13 +14,6 @@ func Debug(message ...interface{}) {
 	}
 }
 
-// Logs out to the logging file. Only used in competition mode.
-func Log(message ...interface{}) {
-	if config.EventMode() {
-
-	}
-}
-
 func BoolToStr(b bool) string {
 	if b {
 		return "1"
