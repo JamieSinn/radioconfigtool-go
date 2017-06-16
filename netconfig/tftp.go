@@ -4,11 +4,7 @@ import (
 	"io"
 	"os"
 	"fmt"
-	"time"
 	"github.com/pin/tftp"
-	"bytes"
-	"firstinspires.org/radioconfigtool/util"
-	"firstinspires.org/radioconfigtool/imaging"
 )
 
 var (

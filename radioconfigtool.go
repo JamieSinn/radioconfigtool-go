@@ -6,8 +6,6 @@ import (
 	"firstinspires.org/radioconfigtool/config"
 	. "firstinspires.org/radioconfigtool/imaging"
 	"firstinspires.org/radioconfigtool/fileio"
-	"bytes"
-	"io"
 	"time"
 )
 
@@ -95,7 +93,7 @@ func Home(flash bool, team, wpakey string) {
 				gui.OutOfDate()
 				return
 			case "AtEvent":
-				gui.ErrorBox("Error", "Your radio was last programmed at an event, and the event's expiry is in the future. " +
+				gui.ErrorBox("Error", "Your radio was last programmed at an event, and the event's expiry is in the future. "+
 					"To prevent connection issues, please wait until the event is over.")
 				return
 			}
@@ -149,20 +147,20 @@ func Competition(team string) {
 	}
 }
 
-
 func getModel() RobotRouter {
 	model, err := netconfig.WaitForRadioModel()
 	if err != nil {
 		gui.ErrorBox("Error", "Failed to detect router type. Please unplug power from the router and try again.")
-		return nil
+		return RobotRouter{}
 	}
 	for _, r := range validRouters {
 		if model == r.ARPString {
 			return r
 		}
 	}
-	return nil
+	return RobotRouter{}
 }
+
 // Experimental flashing system
 func flash(radio RobotRouter) {
 	go netconfig.StartTFTPServer(radio.ReadHandler)
@@ -170,5 +168,3 @@ func flash(radio RobotRouter) {
 	time.Sleep(time.Second * 30)
 	serv.Shutdown()
 }
-
-
