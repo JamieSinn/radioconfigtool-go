@@ -8,6 +8,7 @@ import (
 	"io"
 	"bytes"
 	"github.com/pin/tftp"
+	"firstinspires.org/radioconfigtool/netconfig"
 )
 
 // RouterConfiguration is used for building the configuration string that is sent to the router.
@@ -47,6 +48,9 @@ func (router RobotRouter) ReadHandler(filename string, rf io.ReaderFrom) error {
 		util.Debug("Could not find requested file: " + filename)
 		return err
 	}
+	filecount := <-netconfig.SentFiles
+	filecount++
+	netconfig.SentFiles <- filecount
 	rf.(tftp.OutgoingTransfer).SetSize(int64(file.Size))
 	n, err := rf.ReadFrom(bytes.NewReader(file.Data))
 	if err != nil {

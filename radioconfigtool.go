@@ -50,7 +50,7 @@ func main() {
 
 }
 
-func Home(flash bool, team, wpakey string) {
+func Home(shouldFlash bool, team, wpakey string) {
 
 	/*
 	X- Tool opens
@@ -58,9 +58,9 @@ func Home(flash bool, team, wpakey string) {
 	X- Instructions are on the page
 	X- Selects either program, or image buttons.
 	- On selecting the program button, it sends the configuration string to the team. (pending changes to the config string and system) Return to main screen.
-	- On selecting the image button, listens for ARP request, get radio model, flash radio model via tftp. Return to main screen.
+	- On selecting the image button, listens for ARP request, get radio model, shouldFlash radio model via tftp. Return to main screen.
 	*/
-	if flash {
+	if shouldFlash {
 		// Listen for ARP
 		// Start TFTP Server
 		// Return once all files are requested.
@@ -71,6 +71,7 @@ func Home(flash bool, team, wpakey string) {
 		if model.ARPString == "" {
 			return
 		}
+		flash(model)
 
 	} else {
 		configuration := RouterConfiguration{
@@ -169,8 +170,5 @@ func getModel() RobotRouter {
 
 // Experimental flashing system
 func flash(radio RobotRouter) {
-	go netconfig.StartTFTPServer(radio.ReadHandler)
-	serv := netconfig.TFTPServer
-	time.Sleep(time.Second * 30)
-	serv.Shutdown()
+	netconfig.StartTFTPServer(radio.ReadHandler, len(radio.Image.Files))
 }

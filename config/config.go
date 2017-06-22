@@ -26,6 +26,9 @@ const (
 
 	// ARP_TIMEOUT - Maximum amount of time to wait for ARP requests.
 	ARP_TIMEOUT = 15 * time.Second
+
+	// TFTP_TIMEOUT - Maximum amount of time to send all files
+	TFTP_TIMEOUT = 5 * time.Minute
 )
 
 func EventMode() bool {
