@@ -15,13 +15,13 @@ import (
 // ReadARP loops until the Destination Hardware Address is not an empty string.
 // NOTE: This is threadblocking, and should be.
 func readARP(timeout time.Duration) *layers.ARP {
+	util.Debug("Stating ARP capturing...")
 	handle, err := pcap.OpenLive(NETINT_LAN_GUID, 65536, true, pcap.BlockForever)
 
 	if err != nil {
 		util.Debug(err)
 		return nil
 	}
-
 	src := gopacket.NewPacketSource(handle, layers.LayerTypeEthernet)
 	in := src.Packets()
 	for {
@@ -34,7 +34,7 @@ func readARP(timeout time.Duration) *layers.ARP {
 			}
 			request := arpLayer.(*layers.ARP)
 			if request.Operation == layers.ARPRequest && bytes.Compare(request.SourceProtAddress, []byte{192, 168, 100, 9}) == 0 {
-				util.Debug("Got request request")
+				util.Debug("Got arp request")
 				util.Debug(request)
 				util.Debug(string(request.DstHwAddress))
 
@@ -42,6 +42,7 @@ func readARP(timeout time.Duration) *layers.ARP {
 					return request
 				}
 			}
+			continue
 		case <-time.After(timeout):
 			return nil
 		}

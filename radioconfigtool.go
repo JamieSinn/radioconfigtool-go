@@ -61,12 +61,7 @@ func Home(shouldFlash bool, team, wpakey string) {
 	- On selecting the image button, listens for ARP request, get radio model, shouldFlash radio model via tftp. Return to main screen.
 	*/
 	if shouldFlash {
-		// Listen for ARP
-		// Start TFTP Server
-		// Return once all files are requested.
 		// Popup saying complete...
-		//TODO: Flash radio
-
 		model := getModel()
 		if model.ARPString == "" {
 			return
@@ -148,7 +143,16 @@ func Competition(team string) {
 			gui.InvalidResp()
 			return
 		case "OutOfDate":
-			//TODO: Flash radio.
+			model := getModel()
+			if model.ARPString == "" {
+				return
+			}
+			flash(model)
+			time.Sleep(time.Minute * 3)
+			err := SendConfiguration(enc)
+			if err != nil {
+				// TODO: Config failed after flash.
+			}
 			break
 		}
 	}

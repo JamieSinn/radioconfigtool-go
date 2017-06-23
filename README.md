@@ -49,8 +49,8 @@ _Win x64 compilation instructions from [Stack Overflow](https://stackoverflow.co
 ~~- Setup an rsrc script to inject the manifest into the final exe~~
 ~~- Unit testing setup~~
 ~~- Encryption for configuration.~~
-- TFTP Server setup
-- ARP Listener setup
+~~- TFTP Server setup~~
+~~- ARP Listener setup~~
 
 
 ## Software Flow (Team Use)
