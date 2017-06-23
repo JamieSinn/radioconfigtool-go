@@ -9,7 +9,7 @@ into the binary.
 - Immense amount low level support and libraries. 
 
 ## How it works
-This configuration tool is a re-write of the current Radio Configuration tool, with two key differences.
+This configuration tool is a re-write of the current Radio Configuration tool, with a few key differences.
 - No longer written in Java, so decompilation to gain access to the source is no longer possible (Go compiles to machine code.)
 - Connection protocol is now encrypted - no longer possible to intercept and steal credentials without serious work.
 - Embedded TFTP Server for imaging (removes the need of ap51-flash.exe)
@@ -57,7 +57,7 @@ _Win x64 compilation instructions from [Stack Overflow](https://stackoverflow.co
 
 - Tool opens
 - Team enters their number
-- Instructions are on the page
+    - Instructions are on the page
 - Selects either program, or image buttons.
 - On selecting the program button, it sends the configuration string to the team. (pending changes to the config string and system) Return to main screen.
 - On selecting the image button, listens for ARP request, get radio model, flash radio model via tftp. Return to main screen.
@@ -70,14 +70,14 @@ _Win x64 compilation instructions from [Stack Overflow](https://stackoverflow.co
 - Selects "Program"
 - Listens for ARP string and gets model
 - Flashes radio with image 
-- Upon the radio booting up again, the radio is configured (tbd method)
+- Upon the radio booting up again, the radio is configured
 
 ## Packages
 
 - config
   * Used to hold all configuration values that changes different parts of the program
 - fileio
-  * Used to read and parse OpenWRT Image files
+  * Used to read and parse OpenWRT Image files as well as the WPA Key CSV.
 - gui
   * Handles the GUI
 - imaging
