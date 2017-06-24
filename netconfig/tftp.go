@@ -22,11 +22,12 @@ func StartTFTPServer(readHandler func(filename string, rf io.ReaderFrom) error, 
 	go s.ListenAndServe("192.168.100.8:69") // blocks until s.Shutdown() is called
 	for {
 		i := <-SentFiles
-		select {
-		case i >= numFiles:
+		if i >= numFiles {
 			s.Shutdown()
 			SentFiles<- 0
 			return
+		}
+		select {
 		case <-time.After(config.TFTP_TIMEOUT):
 			gui.ErrorBox("Error", "Failed to send all files within the 5 minute timelimit. " + strconv.Itoa(i) +
 				" files were sent of the " + strconv.Itoa(numFiles) + " available")
