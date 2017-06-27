@@ -7,6 +7,7 @@ import (
 	. "firstinspires.org/radioconfigtool/imaging"
 	"firstinspires.org/radioconfigtool/fileio"
 	"time"
+	"firstinspires.org/radioconfigtool/util"
 )
 
 var (
@@ -82,9 +83,11 @@ func Home(shouldFlash bool, team, wpakey string) {
 			RadioID_5:   0,
 			Event:       "",
 		}
+		util.Debug("Building config string...")
 		str := configuration.BuildConfigString()
 		enc := EncryptConfigString(str)
 		err := SendConfiguration(enc)
+		util.Debug("Full config string: " + enc)
 
 		if err != nil {
 			switch err.Error() {

@@ -15,18 +15,23 @@ import (
 // Open a tcp socket, and send the config string to the radio.
 func SendConfiguration(data string) error {
 	conn, err := net.Dial("tcp", "192.168.1.1:8888")
-	defer conn.Close()
+	util.Debug("Opened connection with errors: " + err.Error())
 	if err != nil {
+		util.Debug(err)
 		return err
 	}
-
+	defer conn.Close()
 	result, err := ioutil.ReadAll(conn)
 	if err != nil {
-		panic(err)
+		util.Debug(err)
+		return err
 	}
+	util.Debug("Raw data from connection: " + string(result))
 	// String is a base64 encoded string to prevent immediate prying eyes.
 	// Must decode before use.
 	dec, _ := base64.StdEncoding.DecodeString(string(result))
+
+	util.Debug("Decoded string: " + string(dec))
 
 	// Split all lines for easier use
 	lines := strings.Split(string(dec), "\n")
@@ -51,7 +56,6 @@ func SendConfiguration(data string) error {
 	if atevent {
 		return errors.New("AtEvent")
 	}
-
 
 	// Prepend the configuration string with a 1|0 if this is for competition.
 	// This is because the radio programmer needs to use the correct key to decrypt the string.
