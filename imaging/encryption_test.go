@@ -27,15 +27,3 @@ func TestDecrypt(t *testing.T) {
 		t.Fail()
 	}
 }
-
-func TestConfigEncryptDecrypt(t *testing.T) {
-	conf := "AP5,1334,1334,8charlen,N,N,Y,0,0,,\n"
-	util.Debug(conf)
-	enc := EncryptConfigString(conf)
-	util.Debug(enc)
-	dec := DecryptConfigString(enc)
-	util.Debug(dec)
-	if dec != conf {
-		t.Fail()
-	}
-}
