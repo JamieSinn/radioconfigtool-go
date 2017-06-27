@@ -279,7 +279,13 @@ func getResetInstructions() Widget {
 			Label{
 				Row:    4,
 				Column: 0,
-				Text:   "4) Wait until the process is complete. (15-60 seconds). If the router is failed to be detected, restart flashing procedure.",
+				Text:   "4) Wait until the process is complete. (15-60 seconds).",
+				Font:   tahoma(12, false),
+			},
+			Label{
+				Row:    5,
+				Column: 0,
+				Text:   "If the router is failed to be detected, restart flashing procedure.",
 				Font:   tahoma(12, false),
 			},
 		},
@@ -295,15 +301,15 @@ func tahoma(pointsize int, bold bool) Font {
 }
 
 func invalidTeam() {
-	ErrorBox( "Error", "Invalid Team Number. Team number must be 1-9999.")
+	ErrorBox("Error", "Invalid Team Number. Team number must be 1-9999.")
 }
 
 func InvalidResp() {
-	ErrorBox( "Error", "Invalid Radio Response. Please make sure you are using a supported radio.")
+	ErrorBox("Error", "Invalid Radio Response. Please make sure you are using a supported radio.")
 }
 
 func OutOfDate() {
-	ErrorBox( "Error", "Radio firmware is out of date, please re-image.")
+	ErrorBox("Error", "Radio firmware is out of date, please re-image.")
 }
 
 func Complete() {

@@ -2,7 +2,6 @@ package imaging
 
 import (
 	"net"
-	"io/ioutil"
 	"strings"
 	"errors"
 	"firstinspires.org/radioconfigtool/util"
@@ -10,31 +9,47 @@ import (
 	"firstinspires.org/radioconfigtool/config"
 	"strconv"
 	"time"
+	"io"
 )
 
 // Open a tcp socket, and send the config string to the radio.
 func SendConfiguration(data string) error {
 	conn, err := net.Dial("tcp", "192.168.1.1:8888")
-	util.Debug("Opened connection with errors: " + err.Error())
 	if err != nil {
 		util.Debug(err)
 		return err
 	}
-	defer conn.Close()
-	result, err := ioutil.ReadAll(conn)
-	if err != nil {
-		util.Debug(err)
-		return err
+	buf := make([]byte, 0, 4096)
+	tmp := make([]byte, 256)
+	for {
+		n, err := conn.Read(tmp)
+		if err != nil {
+			if err != io.EOF {
+				util.Debug("Socket: read error:", err)
+			}
+			break
+		}
+		util.Debug("Socket: got", n, "bytes.")
+		util.Debug("'" + string(tmp) + "'")
+		buf = append(buf, tmp[:n]...)
+		if n < len(tmp) {
+			break
+		}
 	}
-	util.Debug("Raw data from connection: " + string(result))
+	result := buf
+	util.Debug("Raw data from connection: '" + string(result) + "'")
 	// String is a base64 encoded string to prevent immediate prying eyes.
 	// Must decode before use.
-	dec, _ := base64.StdEncoding.DecodeString(string(result))
+	stripped := strings.Replace(string(result), "\n", "", -1)
+	dec, _ := base64.StdEncoding.DecodeString(stripped)
 
 	util.Debug("Decoded string: " + string(dec))
 
 	// Split all lines for easier use
 	lines := strings.Split(string(dec), "\n")
+	for _, l := range lines {
+		util.Debug("Line: '" + l + "'")
+	}
 	// Check if the data received is valid
 	valid := IsValid(lines)
 
@@ -42,25 +57,29 @@ func SendConfiguration(data string) error {
 		return errors.New("Invalid")
 	}
 
+	util.Debug("Data is valid.")
 	// Check if the radio image version is up to date.
-	uptodate := IsUpToDate(lines[1])
+	// The first check is for debugging only.
+	uptodate := (config.DEBUG && lines[1] == "Version: ") || IsUpToDate(lines[1])
 
 	if !uptodate {
 		return errors.New("OutOfDate")
 	}
 
+	util.Debug("Version is up to date.")
 	// Check if the radio is attempted to be programmed while an event is going on
 	// by the team configuration build.
-	atevent := IsWithinCompetition(lines[2]) && config.EventMode()
+	atevent := config.EventMode() && IsWithinCompetition(lines[2])
 
 	if atevent {
 		return errors.New("AtEvent")
 	}
+	util.Debug("Not at an event.")
 
 	// Prepend the configuration string with a 1|0 if this is for competition.
 	// This is because the radio programmer needs to use the correct key to decrypt the string.
-	data = util.BoolToStr(config.EventMode()) + "," + data
-
+	data = util.BoolToStr(config.EventMode()) + "," + data + ",\n"
+	util.Debug("To Send: '" + data + "'")
 	_, err = conn.Write([]byte(data))
 	return err
 }

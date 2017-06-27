@@ -6,7 +6,7 @@ import (
 )
 
 func TestEncryptDecrypt(t *testing.T) {
-	conf := "7364260261692962810793672227443888951894855411148636427833416688690047096986774713905710607029474025"
+	conf := "AP5,1334,1334,8charlen,N,N,Y,0,0,,\n"
 	enc := EncryptConfigString(conf)
 	util.Debug(enc)
 	dec := DecryptConfigString(enc)

@@ -34,7 +34,6 @@ var (
 )
 
 func main() {
-
 	if config.EventMode() {
 		fileio.LoadKeys()
 	}
@@ -85,12 +84,14 @@ func Home(shouldFlash bool, team, wpakey string) {
 		}
 		util.Debug("Building config string...")
 		str := configuration.BuildConfigString()
+		util.Debug(str)
 		enc := EncryptConfigString(str)
 		err := SendConfiguration(enc)
 		util.Debug("Full config string: " + enc)
 
 		if err != nil {
 			switch err.Error() {
+			default:
 			case "Invalid":
 				gui.InvalidResp()
 				return
