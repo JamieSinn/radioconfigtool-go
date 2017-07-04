@@ -8,12 +8,11 @@ import (
 	"errors"
 	"io"
 	"firstinspires.org/radioconfigtool/config"
-	"encoding/hex"
 )
 
 var key = []byte(config.ENCRYPTION_KEY)
 
-// EncryptConfigString takes a raw config string, encrypts it using AES-256, then base64
+// EncryptConfigString takes a raw config string, encrypts it using AES-256 CFB, then base64
 // encodes that to make the string size smaller
 func EncryptConfigString(str string) string {
 
@@ -27,7 +26,26 @@ func EncryptConfigString(str string) string {
 	return sEnc
 }
 
-// DecryptConfigString decodes from a base64 string, and then decrypts the AES-256 string
+// EncryptConfigStringCBC takes a raw config string, encrypts it using AES-256 CBC, then base64
+// encodes that to make the string size smaller
+func EncryptConfigStringCBC(str string) string {
+
+	// CBC Needs padding to a multiple of the block size (16)
+	if len(str)%16 != 0 {
+		// Round to nearest multiple, then subtract the current length to get the final amount to add.
+		count := ((len(str) + 15) / 16 * 16) - len(str)
+		for i := 0; i < count; i++ {
+			str += "="
+		}
+	}
+	plaintext := []byte(str)
+	ciphertext := encryptCBC(key, plaintext)
+	// Base64 Encode the encrypted string to reduce the length
+	sEnc := base64.StdEncoding.EncodeToString([]byte(ciphertext))
+	return sEnc
+}
+
+// DecryptConfigString decodes from a base64 string, and then decrypts the AES-256 CFB string
 // and returns the raw config string.
 func DecryptConfigString(str string) string {
 
@@ -37,6 +55,17 @@ func DecryptConfigString(str string) string {
 	if err != nil {
 		panic(err)
 	}
+
+	return string(result)
+}
+
+// DecryptConfigString decodes from a base64 string, and then decrypts the AES-256 CFB string
+// and returns the raw config string.
+func DecryptConfigStringCBC(str string) string {
+
+	sDec, _ := base64.StdEncoding.DecodeString(str)
+
+	result := decryptCBC(key, sDec)
 
 	return string(result)
 }
@@ -77,7 +106,7 @@ func decrypt(key, text []byte) ([]byte, error) {
 }
 
 func decryptCBC(key, ciphertext []byte) string {
-	ciphertext, _ = hex.DecodeString("f363f3ccdcb12bb883abf484ba77d9cd7d32b5baecb3d4b1b3e0e4beffdb3ded")
+	//ciphertext, _ = hex.DecodeString("f363f3ccdcb12bb883abf484ba77d9cd7d32b5baecb3d4b1b3e0e4beffdb3ded")
 
 	block, err := aes.NewCipher(key)
 	if err != nil {
