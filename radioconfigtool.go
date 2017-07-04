@@ -104,6 +104,8 @@ func Home(shouldFlash bool, team, wpakey string) {
 				return
 			}
 		}
+		time.Sleep(time.Second * 30)
+		gui.InfoBox("Success!", "Radio has been programmed!")
 	}
 }
 
