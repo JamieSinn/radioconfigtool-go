@@ -18,8 +18,62 @@ func TestEncryptDecrypt(t *testing.T) {
 }
 
 
-func TestEncryptDecryptCBC(t *testing.T) {
+func TestEncryptDecryptCBC_1334(t *testing.T) {
 	conf := "AP5,1334,1334,8charlen,N,N,Y,0,0,,\n"
+	enc := EncryptConfigStringCBC(conf)
+	util.Debug(enc)
+	dec := DecryptConfigStringCBC(enc)
+	util.Debug(dec)
+	dec = strings.Replace(dec, "=", "", -1)
+	util.Debug(dec)
+	if dec != conf {
+		t.Fail()
+	}
+}
+
+func TestEncryptDecryptCBC_1114(t *testing.T) {
+	conf := "AP24,1114,1114,8charlen,N,N,Y,0,0,,\n"
+	enc := EncryptConfigStringCBC(conf)
+	util.Debug(enc)
+	dec := DecryptConfigStringCBC(enc)
+	util.Debug(dec)
+	dec = strings.Replace(dec, "=", "", -1)
+	util.Debug(dec)
+	if dec != conf {
+		t.Fail()
+	}
+}
+
+func TestEncryptDecryptCBC_254(t *testing.T) {
+	conf := "B5,254,254,8charlen,N,N,Y,0,0,,\n"
+	enc := EncryptConfigStringCBC(conf)
+	util.Debug(enc)
+	dec := DecryptConfigStringCBC(enc)
+	util.Debug(dec)
+	dec = strings.Replace(dec, "=", "", -1)
+	util.Debug(dec)
+	if dec != conf {
+		t.Fail()
+	}
+}
+
+
+func TestEncryptDecryptCBC_11(t *testing.T) {
+	conf := "B5,11,11,8charlen,N,N,Y,0,0,,\n"
+	enc := EncryptConfigStringCBC(conf)
+	util.Debug(enc)
+	dec := DecryptConfigStringCBC(enc)
+	util.Debug(dec)
+	dec = strings.Replace(dec, "=", "", -1)
+	util.Debug(dec)
+	if dec != conf {
+		t.Fail()
+	}
+}
+
+
+func TestEncryptDecryptCBC_1(t *testing.T) {
+	conf := "B5,1,1,8charlen,N,N,Y,0,0,,\n"
 	enc := EncryptConfigStringCBC(conf)
 	util.Debug(enc)
 	dec := DecryptConfigStringCBC(enc)
